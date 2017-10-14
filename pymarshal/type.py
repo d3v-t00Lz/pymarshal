@@ -7,6 +7,7 @@ from .key_swap import key_swap
 
 __all__ = [
     'type_assert',
+    'type_assert_dict',
     'type_assert_iter',
 ]
 
@@ -45,16 +46,44 @@ def type_assert(obj, cls):
 def type_assert_iter(iterable, cls):
     """ Checks that every object in @iterable is an instance of @cls
 
-        Will also unmarshal JSON objects to Python objects if @obj
-        is an instance of dict
+        Will also unmarshal JSON objects to Python objects if items in
+        @iterable are an instance of dict
 
         Returns:
             @iterable, note that @iterable will be recreated, which
             may be a performance concern if @iterable has many items
-        :raises TypeError: if @obj is not an instance of @cls
+        Raises:
+            TypeError: if @obj is not an instance of @cls
     """
     t = type(iterable)
     return t(
         _check(obj, cls) for obj in iterable
+    )
+
+
+def type_assert_dict(
+    d,
+    kcls=None,
+    vcls=None
+):
+    """ Checks that every key/value in @d is an instance of @kcls/@vcls
+
+        Will also unmarshal JSON objects to Python objects if
+        the value is an instance of dict and @vcls is a class type
+
+        Returns:
+            @d, note that @d will be recreated, which
+            may be a performance concern if @d has many items
+        Raises:
+            TypeError: if a key is not an instance of @kcls or
+                       a value is not an instance of @vcls
+    """
+    t = type(d)
+    return t(
+        (
+            _check(k, kcls) if kcls else k,
+            _check(v, vcls) if vcls else v,
+        )
+        for k, v in d.items()
     )
 

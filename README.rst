@@ -22,12 +22,16 @@
            self.b = type_assert(b, ClassB)
 
    class ClassB:
-       # Replaces keys in the JSON object before passing
-       # to __init__()
+       # Optional: Replaces keys in the JSON object before
+       # passing to __init__()
+       # Useful for JSON keys that are not valid Python variable names
        _unmarshal_key_swap = {
            "C": "c",
        }
-       #
+       # Controls mapping the keys back to JSON.
+       # If unmarshalling doesn't map multiple keys to the same value,
+       # you can simply use:
+       # {v: k for k, v in _unmarshal_key_swap.items()}
        _marshal_key_swap = {
            "c": "C",
        }

@@ -33,6 +33,26 @@ def test_type_assert_iter():
         ([object()], object),
     ):
         # should not raise
-        type_assert_iter(obj, obj_type)
+        assert obj == type_assert_iter(obj, obj_type)
 
+
+def test_type_assert_dict():
+    for d, kcls, vcls in (
+        ({5: "a", 6: "b"}, int, str),
+        ({5: "a", 6: "b"}, None, None),
+        ({"a": 4.2, "b": 5.7}, str, float),
+    ):
+        # should not raise or change the value
+        assert d == type_assert_dict(d, kcls, vcls)
+
+
+def test_type_assert_dict_raises():
+    for d, kcls, vcls in (
+        ({5: "a", 6: "b"}, str, str),
+        ({5: "a", 6: "b"}, None, int),
+        ({5: "a", 6: "b"}, str, None),
+    ):
+        # should not raise or change the value
+        with pytest.raises(TypeError):
+            type_assert_dict(d, kcls, vcls)
 

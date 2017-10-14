@@ -12,6 +12,7 @@ from .type import *
 __all__ = [
     'marshal_json',
     'type_assert',
+    'type_assert_dict',
     'type_assert_iter',
     'unmarshal_json',
 ]
