@@ -2,6 +2,7 @@
 
 """
 
+from .json import unmarshal_json
 from .key_swap import key_swap
 
 
@@ -16,7 +17,7 @@ def _check(obj, cls):
     if not isinstance(obj, cls):
         if isinstance(obj, dict):
             obj = key_swap(obj, cls, True)
-            return cls(**obj)
+            return unmarshal_json(obj, cls)
         msg = '{0} is not an instance of {1}, is {2}'.format(
             obj,
             cls,

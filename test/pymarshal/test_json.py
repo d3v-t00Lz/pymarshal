@@ -44,9 +44,13 @@ def test_unmarshal_json():
             self.b = type_assert(b, float)
 
 
-    obj = unmarshal_json({'a': 5, 'b': {'b': 10.2}}, TestClassA)
+    obj = unmarshal_json(
+        {'a': 5, 'b': {'b': 10.2, 'c': 4.5}}, # 'c' should be ignored
+        TestClassA,
+    )
     assert obj.a == 5
     assert obj.b.b == 10.2
+    assert not hasattr(obj.b, 'c')
 
 
 def test_unmarshal_json_raises_extra_keys_error():
@@ -60,6 +64,27 @@ def test_unmarshal_json_raises_extra_keys_error():
             TestClassA,
             allow_extra_keys=False,
         )
+
+
+def test_unmarshal_json_raises_extra_keys_error_from_cls():
+    class TestClassA:
+        def __init__(self, a, b):
+            self.a = type_assert(a, int)
+            self.b = type_assert(b, TestClassB)
+
+    class TestClassB:
+        _unmarshal_allow_extra_keys = False
+
+        def __init__(self, c):
+            self.c = type_assert(c, float)
+
+    with pytest.raises(ExtraKeysError):
+        unmarshal_json(
+            {'a': 5, 'b': {'c': 4.5, 'd': 2.4}},
+            TestClassA,
+            allow_extra_keys=True,
+        )
+
 
 def test_unmarshal_json_allow_extra_keys():
     class TestClassA:

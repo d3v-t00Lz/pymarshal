@@ -71,6 +71,15 @@ def unmarshal_json(obj, cls, allow_extra_keys=True):
     args = init_args(cls)
     obj = key_swap(obj, cls, False)
     kwargs = {k: v for k, v in obj.items() if k in args}
+
+    # If either is set to False, do not allow extra keys
+    # to be present in obj but not in cls.__init__
+    allow_extra_keys = (
+        getattr(cls, '_unmarshal_allow_extra_keys', True)
+        and
+        allow_extra_keys
+    )
+
     if not allow_extra_keys and len(obj) > len(kwargs):
         diff = {k: v for k, v in obj.items() if k not in args}
         msg = "Extra keys present, but allow_extra_keys=={}: {}".format(

@@ -25,7 +25,7 @@
            self.a = type_assert(a, int)
            # If 'b' is an instance of ClassB, it will simply pass through
            # If 'b' is a dictionary, it will be unmarshalled into a new
-           #     ClassB instance
+           #     ClassB instance using ClassB(**b)
            # If neither, it will raise TypeError
            self.b = type_assert(b, ClassB)
 
@@ -55,6 +55,12 @@
 
        #_marshal_only_init_args = True
 
+       # Optional: Set to False to forbid extra keys from being present in
+       # the JSON object to unmarshal from.  Defaults to True if not present.
+       # This overrides allow_extra_keys=True in unmarshal_json, and is
+       # the only way to control extra keys from within nested objects
+
+       #_unmarshal_allow_extra_keys = False
 
        def __init__(self, c):
            self.c = type_assert(c, float)
