@@ -6,6 +6,7 @@
    # such as:
    #   - extra keys being silently ignored
    #   - lack of mandatory fields
+   #   - lack of default values
 
    # pymarshal uses the 'type_assert' function to both enforce the type,
    # and to unmarshal nested objects.  There is also:
