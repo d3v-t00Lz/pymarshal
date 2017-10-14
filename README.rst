@@ -28,15 +28,23 @@
        _unmarshal_key_swap = {
            "C": "c",
        }
-       # Controls mapping the keys back to JSON.
+       # Optional: Controls mapping the keys back to JSON.
        # If unmarshalling doesn't map multiple keys to the same value,
        # you can simply use:
        # {v: k for k, v in _unmarshal_key_swap.items()}
        _marshal_key_swap = {
            "c": "C",
        }
+       # Optional: Ignores these members when marshalling to JSON
+       _marshal_exclude = [
+           'z',
+       ]
+
        def __init__(self, c):
            self.c = type_assert(c, float)
+           # this will be ignored when marshalling because
+           # of _marshal_exclude
+           self.z = None
 
    >>> j = {"a": 6, "b": {"C": 4.2}}
    >>> obj1 = unmarshal_json(j, ClassA)
