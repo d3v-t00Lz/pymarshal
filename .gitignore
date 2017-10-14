@@ -1,0 +1,16 @@
+# Python
+__pycache__
+*.pyo
+*.pyc
+bin/
+lib/
+lib64
+pyvenv.cfg
+.cache/
+.coverage
+.eggs/
+htmlcov/
+pymarshal.egg-info/
+
+# Vim
+*.swp
