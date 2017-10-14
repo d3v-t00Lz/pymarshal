@@ -1,6 +1,9 @@
 """
-    Module that replicates the functionality of Golang's
+    Replicates the functionality of Golang's
     struct (un)marshalling feature to/from JSON.
+
+    For examples, see:
+    https://github.com/j3ffhubb/pymarshal/blob/master/README.rst
 """
 
 from .json import *

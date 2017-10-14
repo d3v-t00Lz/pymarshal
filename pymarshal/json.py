@@ -26,7 +26,11 @@ JSON_TYPES = (
 def marshal_json(obj):
     """ Recursively marshal a Python object to JSON
 
-        :returns: dict
+        Args:
+            obj: A Python object.  It's members can be nested Python
+                 objects which will be converted to dictionaries
+        Returns:
+            dict
     """
     return {
         k: v if isinstance(v, JSON_TYPES) else marshal_json(v)
@@ -37,11 +41,11 @@ def marshal_json(obj):
 def unmarshal_json(obj, cls):
     """ Unmarshal @obj into @cls
 
-        :param obj:  A JSON object
-        :type obj: dict
-        :param cls: The class to unmarshal into
-        :type cls: class
-        :returns: instance of @cls
+        Args:
+            obj: dict, A JSON object
+            cls: type, The class to unmarshal into
+        Returns:
+            instance of @cls
     """
     obj = key_swap(obj, cls, False)
     return cls(**obj)
