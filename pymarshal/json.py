@@ -2,9 +2,9 @@
 
 """
 
-import inspect
 import json
 
+from .init_args import init_args
 from .key_swap import key_swap
 
 
@@ -61,13 +61,7 @@ def unmarshal_json(obj, cls, allow_extra_keys=True):
         Raises:
             ValueError:  If @cls.__init__ does not contain a self argument
     """
-    argspec = inspect.getargspec(cls.__init__)
-    args = argspec.args
-    # raises ValueError if not present.  Not having a self argument
-    # in __init__ is almost certainly a user error, and if not
-    # there is a special place in hell for people who call the first
-    # argument anything but 'self'
-    args.remove('self')
+    args = init_args(cls)
     obj = key_swap(obj, cls, False)
     kwargs = {k: v for k, v in obj.items() if k in args}
     if not allow_extra_keys and len(obj) > len(kwargs):
