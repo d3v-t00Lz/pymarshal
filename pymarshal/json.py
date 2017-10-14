@@ -40,7 +40,7 @@ def marshal_json(obj):
         Returns:
             dict
     """
-    excl = obj._marshal_exclude if hasattr(obj, '_marshal_exclude') else []
+    excl = getattr(obj, '_marshal_exclude', [])
     return {
         k: v if isinstance(v, JSON_TYPES) else marshal_json(v)
         for k, v in obj.__dict__.items()
