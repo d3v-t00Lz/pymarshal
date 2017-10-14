@@ -1,12 +1,16 @@
 .. code-block:: python
    # pymarshal replicates the features of (un)marshalling structs to/from
    # JSON in Golang.  Rather than attempting to replicate the exact
-   # feature as it exists in Go, pymarshal aims for
-   # elegant, Pythonic simplicity.
+   # feature as it exists in Go, pymarshal aims for elegant,
+   # Pythonic simplicity, and to fix the flaws in Go's implementation
+   # such as:
+   #   - extra keys being silently ignored
+   #   - lack of mandatory fields
 
    # pymarshal uses the 'type_assert' function to both enforce the type,
-   # and to unmarshal nested objects.  There is also a 'type_assert_iter'
-   # function to assure that all items in an iterable
+   # and to unmarshal nested objects.  There is also:
+   #   - 'type_assert_iter' for iterables
+   #   - 'type_assert_dict' for anything that implements .items() -> k, v
 
    # Rather than using the Golang "tag" syntax, simply create a
    # '_marshal_key_swap' and '_unmarshal_key_swap' dict in your class,
