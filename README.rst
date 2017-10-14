@@ -46,6 +46,14 @@
        _marshal_exclude = [
            'z',
        ]
+       # Optional: Instead of using '_marshal_exclude', you can explicitly
+       # exclude all keys that are not part of __init__().
+       # Note:
+       #     - This will cause _marshal_exclude to be ignored
+       #     - The __init__ args must match the class member names
+
+       #_marshal_only_init_args = True
+
 
        def __init__(self, c):
            self.c = type_assert(c, float)

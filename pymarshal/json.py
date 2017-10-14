@@ -40,7 +40,12 @@ def marshal_json(obj):
         Returns:
             dict
     """
-    excl = getattr(obj, '_marshal_exclude', [])
+    if getattr(obj, '_marshal_only_init_args', False):
+        args = init_args(obj)
+        excl = [x for x in obj.__dict__ if x not in args]
+    else:
+        excl = getattr(obj, '_marshal_exclude', [])
+
     return {
         k: v if isinstance(v, JSON_TYPES) else marshal_json(v)
         for k, v in obj.__dict__.items()
@@ -59,7 +64,9 @@ def unmarshal_json(obj, cls, allow_extra_keys=True):
         Returns:
             instance of @cls
         Raises:
-            ValueError:  If @cls.__init__ does not contain a self argument
+            ExtraKeysError: If allow_extra_keys == False, and extra keys
+                            are present in @obj and not in @cls.__init__
+            ValueError:     If @cls.__init__ does not contain a self argument
     """
     args = init_args(cls)
     obj = key_swap(obj, cls, False)
