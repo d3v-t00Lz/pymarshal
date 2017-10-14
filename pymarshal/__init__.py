@@ -10,6 +10,7 @@ from .json import *
 from .type import *
 
 __all__ = [
+    'ExtraKeysError',
     'marshal_json',
     'type_assert',
     'type_assert_dict',

@@ -47,6 +47,8 @@
            self.z = None
 
    >>> j = {"a": 6, "b": {"C": 4.2}}
+   >>> # pass allow_extra_keys=False to raise an exception when j has
+   >>> # extra keys not present in ClassA.__init__() arguments
    >>> obj1 = unmarshal_json(j, ClassA)
    >>> type(obj1)
    <class '__main__.ClassA'>
