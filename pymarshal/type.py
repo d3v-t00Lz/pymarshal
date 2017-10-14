@@ -14,7 +14,7 @@ __all__ = [
 def _check(obj, cls):
     if not isinstance(obj, cls):
         if isinstance(obj, dict):
-            obj = key_swap(obj, cls)
+            obj = key_swap(obj, cls, True)
             return cls(**obj)
         msg = '{0} is not an instance of {1}, is {2}'.format(
             obj,

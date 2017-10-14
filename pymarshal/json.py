@@ -43,6 +43,6 @@ def unmarshal_json(obj, cls):
         :type cls: class
         :returns: instance of @cls
     """
-    obj = key_swap(obj, cls)
+    obj = key_swap(obj, cls, False)
     return cls(**obj)
 

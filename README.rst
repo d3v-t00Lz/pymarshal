@@ -2,12 +2,13 @@
    # pymarshal replicates the features of (un)marshalling structs to/from
    # JSON in Golang.
    # pymarshal uses the 'type_assert' function to both enforce the type,
-   # and to unmarshal nested objects.
+   # and to unmarshal nested objects.  There is also a 'type_assert_iter'
+   # function to assure that all items in an iterable
 
    # Rather than using the Golang "tag" syntax, simply create a
-   # '_pm_key_swap' dict in your class, and any re-named keys
-   # (or keys that would be invalid Python names)
-   # will be swapped before being passed to the class constructor.
+   # '_marshal_key_swap' and '_unmarshal_key_swap' dict in your class,
+   # and any re-named keys will be swapped before being passed to the
+   # class constructor or before
 
    from pymarshal import *
 
@@ -23,13 +24,25 @@
    class ClassB:
        # Replaces keys in the JSON object before passing
        # to __init__()
-       _pm_key_swap = {
+       _unmarshal_key_swap = {
            "C": "c",
+       }
+       #
+       _marshal_key_swap = {
+           "c": "C",
        }
        def __init__(self, c):
            self.c = type_assert(c, float)
 
    >>> j = {"a": 6, "b": {"C": 4.2}}
-   >>> obj = unmarshal_json(j, ClassA) # Populate a ClassA object from j
-   >>> marshal_json(obj) # convert obj back to j
+   >>> obj1 = unmarshal_json(j, ClassA)
+   >>> type(obj1)
+   <class '__main__.ClassA'>
+   >>> obj1.a
+   6
+   >>> ob1.b.c
+   4.2
+   >>> obj2 = ClassA(12, ClassB(1.5))
+   >>> marshal_json(obj2)
+   {"a": 12, "b": {"C": 1.5}}
 
