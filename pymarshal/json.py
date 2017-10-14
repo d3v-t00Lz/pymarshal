@@ -30,7 +30,9 @@ class ExtraKeysError(Exception):
 
 
 def marshal_json(obj):
-    """ Recursively marshal a Python object to JSON
+    """ Recursively marshal a Python object to a JSON-compatible dict
+        that can be passed to json.{dump,dumps}, a web client,
+        or a web server, etc...
 
         Args:
             obj: A Python object.  It's members can be nested Python
@@ -56,9 +58,15 @@ def unmarshal_json(obj, cls, allow_extra_keys=True):
                               keys are present, True to ignore
         Returns:
             instance of @cls
+        Raises:
+            ValueError:  If @cls.__init__ does not contain a self argument
     """
     argspec = inspect.getargspec(cls.__init__)
     args = argspec.args
+    # raises ValueError if not present.  Not having a self argument
+    # in __init__ is almost certainly a user error, and if not
+    # there is a special place in hell for people who call the first
+    # argument anything but 'self'
     args.remove('self')
     obj = key_swap(obj, cls, False)
     kwargs = {k: v for k, v in obj.items() if k in args}
