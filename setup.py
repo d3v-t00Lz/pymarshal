@@ -30,9 +30,9 @@ class PyTest(TestCommand):
 
 
 
-packages = setuptools.find_packages(
-    exclude=["test"],
-)
+packages = [
+    NAME
+]
 
 install_requires = []
 tests_requires = [
