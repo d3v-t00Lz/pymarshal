@@ -67,11 +67,16 @@ def type_assert_dict(
     kcls=None,
     vcls=None
 ):
-    """ Checks that every key/value in @d is an instance of @kcls/@vcls
+    """ Checks that every key/value in @d is an instance of @kcls: @vcls
 
         Will also unmarshal JSON objects to Python objects if
         the value is an instance of dict and @vcls is a class type
 
+        Args:
+            d: The dict to type assert
+            @kcls: The class to type assert for keys.
+                   NOTE: JSON only allows str keys
+            @vcls: The class to type assert for values
         Returns:
             @d, note that @d will be recreated, which
             may be a performance concern if @d has many items
