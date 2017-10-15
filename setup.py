@@ -51,7 +51,6 @@ setuptools.setup(
     ],
     cmdclass = {'test': PyTest},
     setup_requires=['pytest-runner'],
-    test_suite='src/test',
     # PyPI
     download_url="/".join([
         URL,
