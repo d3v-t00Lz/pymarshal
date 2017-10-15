@@ -10,7 +10,7 @@ from setuptools.command.test import test as TestCommand
 
 
 NAME = "pymarshal"
-VERSION = "1.0.0"
+VERSION = "1.0.5"
 URL = 'https://github.com/j3ffhubb/pymarshal'
 
 
@@ -39,6 +39,7 @@ setuptools.setup(
     author_email='j3ffhubb@users.noreply.github.com',
     license='BSD',
     description="Pythonic implementation of Golang's (un)marshalling of JSON",
+    long_description=open('README.md', 'rt').read(),
     url=URL,
     packages=[
         NAME
