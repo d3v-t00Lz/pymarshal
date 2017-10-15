@@ -9,15 +9,20 @@ such as:
   - lack of mandatory fields
   - lack of default values
 
-pymarshal provides the `type_assert` function to both enforce the type,
-and to unmarshal nested objects.  There is also:
+The only modification required to your class code is to use the `type_assert`
+functions to assign `__init__` arguments to self variables of the same
+name.  pymarshal provides the `type_assert` function to both enforce the type,
+and to unmarshal nested objects.
+
+There is also:
   - `type_assert_iter` for iterables
   - `type_assert_dict` for anything that implements .items() -> k, v
 
 Rather than using the Golang "tag" syntax, simply create a
 `_marshal_key_swap` and `_unmarshal_key_swap` dict in your class,
 and any re-named keys will be swapped before being passed to the
-class constructor or before being marshalled to JSON
+class constructor or before being marshalled to JSON.  The full list
+of control variables are documented in `ClassB` below.
 
 ## Example
 
@@ -80,7 +85,7 @@ class ClassB:
 <class '__main__.ClassA'>
 >>> obj1.a
 6
->>> ob1.b.c
+>>> obj1.b.c
 4.2
 >>> obj2 = ClassA(12, ClassB(1.5))
 >>> marshal_json(obj2)
