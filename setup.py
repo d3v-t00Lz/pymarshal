@@ -10,7 +10,7 @@ from setuptools.command.test import test as TestCommand
 
 
 NAME = "pymarshal"
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 URL = 'https://github.com/j3ffhubb/pymarshal'
 
 
