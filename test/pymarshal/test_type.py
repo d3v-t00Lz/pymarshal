@@ -17,6 +17,16 @@ def test_type_assert():
         type_assert(obj, obj_type)
 
 
+def test_type_assert_allow_none():
+    for cls in (
+        int,
+        float,
+        object,
+    ):
+        # should not raise
+        assert type_assert(None, cls, allow_none=True) is None
+
+
 def test_type_assert_raises():
     for obj, obj_type in (
         (5, float),
