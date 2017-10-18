@@ -52,7 +52,6 @@ def test_type_assert_dict_raises():
         ({5: "a", 6: "b"}, None, int),
         ({5: "a", 6: "b"}, str, None),
     ):
-        # should not raise or change the value
         with pytest.raises(TypeError):
             type_assert_dict(d, kcls, vcls)
 
