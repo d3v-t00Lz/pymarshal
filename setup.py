@@ -3,6 +3,7 @@
 
 """
 
+import os
 import setuptools
 import sys
 
@@ -10,8 +11,25 @@ from setuptools.command.test import test as TestCommand
 
 
 NAME = "pymarshal"
-VERSION = "1.1.1"
 URL = 'https://github.com/j3ffhubb/pymarshal'
+
+def _version():
+    if 'test' in sys.argv:
+        # avoid triggering a pytest coverage report bug
+        return 'test'
+    path = sys.path[:]
+    dirname = os.path.dirname(__file__)
+    abspath = os.path.abspath(dirname)
+    sys.path.insert(
+        0,
+        abspath,
+    )
+    import pymarshal
+    version = pymarshal.__version__
+    sys.path = path
+    return version
+
+VERSION = _version()
 
 
 class PyTest(TestCommand):

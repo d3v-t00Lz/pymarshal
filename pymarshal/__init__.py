@@ -6,8 +6,7 @@
     https://github.com/j3ffhubb/pymarshal/blob/master/README.rst
 """
 
-from .json import *
-from .type import *
+__version__ = '1.1.1'
 
 __all__ = [
     'ExtraKeysError',
@@ -17,3 +16,7 @@ __all__ = [
     'type_assert_iter',
     'unmarshal_json',
 ]
+
+
+from .json import *
+from .type import *
