@@ -79,11 +79,13 @@ class ClassB:
 
     # Optional: Exclude any key whose value is None when marshalling
     # The __init__ args this may affect should have a default value of None
+    # and type_assert(..., allow_none=True) in the assignment
 
     # _marshal_exclude_none = True
 
     # Optional: Exclude specific keys if their value is None when marshalling
     # The corresponding __init__ args should have a default value of None
+    # and type_assert(..., allow_none=True) in the assignment
     # There is no need to set this if _marshal_exclude_none == True
 
     # _marshal_exclude_none_keys = ['key1', 'key2']
