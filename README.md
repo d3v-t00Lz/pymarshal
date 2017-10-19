@@ -74,6 +74,17 @@ class ClassB:
 
     # _unmarshal_allow_extra_keys = False
 
+    # Optional: Exclude any key whose value is None when marshalling
+    # The __init__ args this may affect should have a default value of None
+
+    # _marshal_exclude_none = True
+
+    # Optional: Exclude specific keys if their value is None when marshalling
+    # The corresponding __init__ args should have a default value of None
+    # There is no need to set this if _marshal_exclude_none == True
+
+    # _marshal_exclude_none_keys = ['key1', 'key2']
+
     def __init__(self, c):
         self.c = type_assert(c, float)
         # this will be ignored when marshalling because

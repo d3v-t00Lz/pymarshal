@@ -29,14 +29,16 @@ class ExtraKeysError(Exception):
     """ Raised when extra JSON object keys are present """
 
 
-def marshal_json(obj):
+def marshal_json(
+    obj,
+):
     """ Recursively marshal a Python object to a JSON-compatible dict
         that can be passed to json.{dump,dumps}, a web client,
         or a web server, etc...
 
         Args:
-            obj: A Python object.  It's members can be nested Python
-                 objects which will be converted to dictionaries
+            obj:         object, It's members can be nested Python
+                         objects which will be converted to dictionaries
         Returns:
             dict
     """
@@ -46,6 +48,13 @@ def marshal_json(obj):
     else:
         excl = getattr(obj, '_marshal_exclude', [])
 
+    if getattr(obj, '_marshal_exclude_none', False):
+        excl.extend(k for k, v in obj.__dict__.items() if v is None)
+    else:
+        none_keys = getattr(obj, '_marshal_exclude_none_keys', [])
+        if none_keys:
+            excl.extend(x for x in none_keys if obj.__dict__.get(x) is None)
+
     return {
         k: v if isinstance(v, JSON_TYPES) else marshal_json(v)
         for k, v in obj.__dict__.items()
@@ -53,7 +62,11 @@ def marshal_json(obj):
     }
 
 
-def unmarshal_json(obj, cls, allow_extra_keys=True):
+def unmarshal_json(
+    obj,
+    cls,
+    allow_extra_keys=True,
+):
     """ Unmarshal @obj into @cls
 
         Args:

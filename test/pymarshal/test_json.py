@@ -33,6 +33,33 @@ def test_marshal_json_marshal_only_init_args_true():
     assert j == {'a': 10}
 
 
+def test_marshal_json_marshal_exclude_none():
+    class DummyClass:
+        _marshal_exclude_none = True
+        def __init__(self, a):
+            self.a = a
+            self.b = None # should be ignored
+
+    obj = DummyClass(10)
+    j = marshal_json(obj)
+    assert j == {'a': 10}
+
+
+def test_marshal_json_marshal_exclude_none_keys():
+    class DummyClass:
+        _marshal_exclude_none_keys = [
+            'b',
+        ]
+        def __init__(self, a):
+            self.a = a
+            self.b = None # should be ignored
+            self.c = None
+
+    obj = DummyClass(10)
+    j = marshal_json(obj)
+    assert j == {'a': 10, 'c': None}
+
+
 def test_unmarshal_json():
     class TestClassA:
         def __init__(self, a, b):
