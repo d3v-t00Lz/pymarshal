@@ -1,6 +1,6 @@
 ## PyMarshal
 
-pymarshal replicates the features of (un)marshalling structs to/from
+pymarshal replicates the feature of (un)marshalling structs to/from
 JSON in Golang.  Rather than attempting to replicate the exact
 feature as it exists in Go, pymarshal aims for elegant,
 Pythonic simplicity, and to fix the flaws in Go's implementation
