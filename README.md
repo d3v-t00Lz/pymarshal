@@ -12,7 +12,10 @@ such as:
 The only modification required to your class code is to use the `type_assert`
 functions to assign `__init__` arguments to self variables of the same
 name.  pymarshal provides the `type_assert` function to both enforce the type,
-and to unmarshal nested objects.
+and to unmarshal nested objects.  Your `__init__` methods should only use
+simple assignment through the `type_assert` functions.  If you have a
+use-case for a constructor that does more than simple assignment, use a
+separate 'factory' function.
 
 There is also:
   - `type_assert_iter` for iterables
