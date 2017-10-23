@@ -4,7 +4,7 @@
 
 import pytest
 
-from pymarshal import *
+from pymarshal.json import *
 
 
 def test_marshal_json():
