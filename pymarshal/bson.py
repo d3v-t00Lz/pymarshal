@@ -2,6 +2,9 @@
 
 """
 
+# Will raise an import error if the user hasn't installed 'bson'
+import bson
+
 from .init_args import init_args
 from .key_swap import key_swap
 from .marshal import *
@@ -10,15 +13,16 @@ from .type import *
 
 __all__ = [
     'ExtraKeysError',
-    'marshal_json',
+    'marshal_bson',
     'type_assert',
     'type_assert_dict',
     'type_assert_iter',
-    'unmarshal_json',
+    'unmarshal_bson',
 ]
 
-JSON_TYPES = (
+BSON_TYPES = (
     bool,
+    bson.ObjectId,
     dict,
     float,
     int,
@@ -28,18 +32,18 @@ JSON_TYPES = (
 )
 
 
-def marshal_json(
+def marshal_bson(
     obj,
-    types=JSON_TYPES,
+    types=BSON_TYPES,
 ):
-    """ Recursively marshal a Python object to a JSON-compatible dict
+    """ Recursively marshal a Python object to a BSON-compatible dict
         that can be passed to json.{dump,dumps}, a web client,
         or a web server, etc...
 
         Args:
             obj:   object, It's members can be nested Python
                    objects which will be converted to dictionaries
-            types: tuple-of-types, The JSON primitive types, typically
+            types: tuple-of-types, The BSON primitive types, typically
                    you would not change this
         Returns:
             dict
@@ -47,7 +51,7 @@ def marshal_json(
     return marshal_dict(obj, types)
 
 
-def unmarshal_json(
+def unmarshal_bson(
     obj,
     cls,
     allow_extra_keys=True,
@@ -55,7 +59,7 @@ def unmarshal_json(
     """ Unmarshal @obj into @cls
 
         Args:
-            obj:              dict, A JSON object
+            obj:              dict, A BSON object
             cls:              type, The class to unmarshal into
             allow_extra_keys: bool, False to raise an exception when extra
                               keys are present, True to ignore

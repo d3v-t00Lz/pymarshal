@@ -6,17 +6,8 @@
     https://github.com/j3ffhubb/pymarshal/blob/master/README.rst
 """
 
-__version__ = '1.1.2'
-
-__all__ = [
-    'ExtraKeysError',
-    'marshal_json',
-    'type_assert',
-    'type_assert_dict',
-    'type_assert_iter',
-    'unmarshal_json',
-]
-
-
+from . import json
 from .json import *
-from .type import *
+
+__version__ = '1.1.2'
+__all__ = json.__all__

@@ -65,9 +65,13 @@ setuptools.setup(
     include_package_data=True,
     install_requires=[],
     tests_require=[
+        'bson',
         'pytest',
         'pytest-cov',
     ],
+    extras_require={
+        'bson': ['bson']
+    },
     cmdclass = {'test': PyTest},
     setup_requires=['pytest-runner'],
     # PyPI
@@ -80,6 +84,7 @@ setuptools.setup(
         "go",
         "golang",
         "json",
+        "bson",
         "marshal",
         "unmarshal",
     ],
