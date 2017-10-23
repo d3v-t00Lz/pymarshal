@@ -2,7 +2,7 @@
 
 """
 
-from pymarshal.key_swap import key_swap
+from pymarshal.util.key_swap import key_swap
 
 def test_key_swap():
     class TestClass:

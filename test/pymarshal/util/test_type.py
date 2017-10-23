@@ -4,7 +4,7 @@
 
 import pytest
 
-from pymarshal.type import *
+from pymarshal.util.type import *
 
 
 def test_type_assert():

@@ -2,7 +2,7 @@
 
 """
 
-from pymarshal.init_args import init_args
+from pymarshal.util.init_args import init_args
 
 def test_init_args():
     class C:
