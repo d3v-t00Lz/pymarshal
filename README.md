@@ -1,13 +1,16 @@
 ## PyMarshal
 
-pymarshal replicates the feature of (un)marshalling structs to/from
-JSON in Golang.  Rather than attempting to replicate the exact
-feature as it exists in Go, pymarshal aims for elegant,
-Pythonic simplicity, and to fix the flaws in Go's implementation
-such as:
+pymarshal replicates the feature of (un)marshalling structs in Golang.
+Rather than attempting to replicate the exact feature as it exists in Go,
+pymarshal aims for elegant, Pythonic simplicity, and to fix the flaws in
+Go's implementation such as:
   - extra keys being silently ignored
   - lack of mandatory fields
   - lack of default values
+
+Currently supported formats:
+  - JSON
+  - BSON
 
 The only modification required to your class code is to use the `type_assert`
 functions to assign `__init__` arguments to self variables of the same
@@ -30,7 +33,7 @@ of control variables are documented in `ClassB` below.
 ## Example
 
 ```python
-from pymarshal import *
+from pymarshal.json import *
 
 class ClassA:
     def __init__(self, a, b, b2=None):
