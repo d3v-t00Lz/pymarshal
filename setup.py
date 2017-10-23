@@ -59,9 +59,9 @@ setuptools.setup(
     description="Pythonic implementation of Golang's (un)marshalling of JSON",
     long_description=open('README.md', 'rt').read(),
     url=URL,
-    packages=[
-        NAME
-    ],
+    packages=setuptools.find_packages(
+        exclude=["*.test", "*.test.*", "test.*", "test"],
+    ),
     include_package_data=True,
     install_requires=[],
     tests_require=[
