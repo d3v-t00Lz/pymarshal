@@ -9,5 +9,5 @@
 from . import json
 from .json import *
 
-__version__ = '1.1.2'
+__version__ = '1.2.0'
 __all__ = json.__all__
