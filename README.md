@@ -34,6 +34,10 @@ of control variables are documented in `ClassB` below.
 
 ```python
 from pymarshal.json import *
+# Alternately, will import the same type_assert functions,
+# but (un)marshal_bson instead:
+# from pymarshal.bson import *
+
 
 class ClassA:
     def __init__(self, a, b, b2=None):
