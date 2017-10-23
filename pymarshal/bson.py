@@ -4,6 +4,7 @@
 
 # Will raise an import error if the user hasn't installed 'bson'
 import bson
+import datetime
 
 from .init_args import init_args
 from .key_swap import key_swap
@@ -14,15 +15,18 @@ from .type import *
 __all__ = [
     'ExtraKeysError',
     'marshal_bson',
+    'MongoDocument',
     'type_assert',
     'type_assert_dict',
     'type_assert_iter',
     'unmarshal_bson',
 ]
 
+
 BSON_TYPES = (
     bool,
     bson.ObjectId,
+    datetime.datetime,
     dict,
     float,
     int,
@@ -32,13 +36,35 @@ BSON_TYPES = (
 )
 
 
+class MongoDocument:
+    """ Abstract class to facilitate inserting into MongoDB.
+        Inherit this for classes that represent BSON documents.
+
+        Assumes that you assigned the ObjectId in your
+        class like:
+
+            def __init__(
+                self,
+                ...,
+                _id=None,
+                ...,
+            ):
+
+            self._id = type_assert(
+                _id,
+                bson.ObjectId,
+                allow_none=True,
+            )
+    """
+    _marshal_exclude_none_keys = ['_id']
+
+
 def marshal_bson(
     obj,
     types=BSON_TYPES,
 ):
     """ Recursively marshal a Python object to a BSON-compatible dict
-        that can be passed to json.{dump,dumps}, a web client,
-        or a web server, etc...
+        that can be passed to PyMongo, Motor, etc...
 
         Args:
             obj:   object, It's members can be nested Python
