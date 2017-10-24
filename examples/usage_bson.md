@@ -21,6 +21,6 @@ ObjectId('59ee05b5e13823092f8ce542')
 >>> b.__dict__
 {'a': 1, 'b': 2, '_id': ObjectId('59ee05b5e13823092f8ce542')}
 >>> # Helper method to omit '_id', useful for REST APIs
->>> a.json()
+>>> b.json()
 {'a': 1, 'b': 2}
 ```
