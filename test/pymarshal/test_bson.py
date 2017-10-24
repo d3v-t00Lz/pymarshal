@@ -44,3 +44,22 @@ def test_unmarshal_bson():
     assert obj.b.b == 10.2
     assert not hasattr(obj.b, 'c')
 
+class FakeMongoDoc(MongoDocument):
+    def __init__(self, a, _id=None):
+        self.a = type_assert(a, str)
+        self._id = type_assert(
+            _id,
+            bson.ObjectId,
+            allow_none=True,
+        )
+
+def test_mongodoc_json_include_id_true():
+    _id = bson.ObjectId()
+    a = FakeMongoDoc("b", _id)
+    assert a.json() == {"a": "b"}
+
+
+def test_mongodoc_json_include_id_false():
+    _id = bson.ObjectId()
+    a = FakeMongoDoc("b", _id)
+    assert a.json(include_id=True) == {"a": "b", "_id": str(_id)}

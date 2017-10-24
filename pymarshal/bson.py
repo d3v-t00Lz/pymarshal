@@ -6,11 +6,13 @@
 import bson
 import datetime
 
+from .json import marshal_json
 from .util.marshal import *
 from .util.type import *
 
 
 __all__ = [
+    'bson',
     'ExtraKeysError',
     'marshal_bson',
     'MongoDocument',
@@ -54,7 +56,36 @@ class MongoDocument:
                 allow_none=True,
             )
     """
+    # If you need to override this, just add '_id' to the new list
     _marshal_exclude_none_keys = ['_id']
+
+    def json(
+        self,
+        include_id=False,
+    ):
+        """ Helper method to convert to MongoDB documents to JSON
+
+            The assumption is that you want to return results
+            from a REST API that do not include the _id.
+
+            If you have BSON types that are not JSON-compatible
+            like datetime, override this method to cast them
+            to JSON-compatible types
+
+            Args:
+                include_id: bool, True to cast _id to a str,
+                            False to omit from the result
+            Returns:
+                dict
+        """
+        _id = self._id
+        if include_id:
+            self._id = str(self._id)
+        else:
+            self._id = None
+        j = marshal_json(self)
+        self._id = _id
+        return j
 
 
 def marshal_bson(
