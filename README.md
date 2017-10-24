@@ -33,5 +33,5 @@ of control variables are documented in `ClassB`
 
 ## Examples
 
-(Examples)[https://github.com/j3ffhubb/pymarshal/tree/master/examples/]
+[Examples](https://github.com/j3ffhubb/pymarshal/tree/master/examples/)
 
