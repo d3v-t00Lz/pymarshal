@@ -32,11 +32,11 @@ class ClassB:
         'z',
     ]
 
-    def __init__(self, c):
+    def __init__(self, c, z="test"):
         self.c = type_assert(c, float)
         # this will be ignored when marshalling because
         # of _marshal_exclude
-        self.z = "test"
+        self.z = type_assert(z, str)
 
 >>> # Unmarshal JSON data to an instance of ClassA
 >>> j = {"a": 6, "b": {"C": 4.2}}
