@@ -16,13 +16,24 @@ Currently supported formats:
 As YAML is compatible with JSON, use PyYAML to load or dump data
 with the `pymarshal.json` module, there is no explicit YAML module.
 
+## Installation
+It is recommended that you install
+[from PyPI](https://pypi.python.org/pypi/pymarshal/)
+using `pip install pymarshal`
+
+pymarshal is compatible with Python2.7, and Python3.x
+
+## Overview
+
 The only modification required to your class code is to use the `type_assert`
 functions to assign `__init__` arguments to self variables of the same
-name.  pymarshal provides the `type_assert` function to both enforce the type,
-and to unmarshal nested objects.  Your `__init__` methods should only use
-simple assignment through the `type_assert` functions.  If you have a
-use-case for a constructor that does more than simple assignment, use a
-separate 'factory' function.
+name.  pymarshal provides the `type_assert` functions to both enforce the type,
+and to unmarshal nested objects.
+
+Your `__init__` methods should only use simple assignment through the
+`type_assert` functions.  If you have a use-case for a constructor that
+does more than simple assignment, use a separate
+['factory' function](https://github.com/j3ffhubb/pymarshal/tree/master/examples/factory_function.md).
 
 There is also:
   - `type_assert_iter` for iterables
