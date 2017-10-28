@@ -1,6 +1,8 @@
 """
 
 """
+# Prevent Python2 from getting confused about 'bson' and 'pymarshal.bson'
+from __future__ import absolute_import
 
 # Will raise an import error if the user hasn't installed 'bson'
 import bson
