@@ -1,9 +1,5 @@
 ```python
 from pymarshal.json import *
-# Alternately, will import the same type_assert functions,
-# but (un)marshal_bson instead:
-# from pymarshal.bson import *
-
 
 class ClassA:
     def __init__(self, a, b, b2=None):
@@ -35,40 +31,14 @@ class ClassB:
     _marshal_exclude = [
         'z',
     ]
-    # Optional: Instead of using '_marshal_exclude', you can explicitly
-    # exclude all keys that are not part of __init__().
-    # Note:
-    #     - This will cause _marshal_exclude to be ignored
-    #     - The __init__ args must match the class member names
-
-    # _marshal_only_init_args = True
-
-    # Optional: Set to False to forbid extra keys from being present in
-    # the JSON object to unmarshal from.  Defaults to True if not present.
-    # This overrides allow_extra_keys=True in unmarshal_json, and is
-    # the only way to control extra keys from within nested objects
-
-    # _unmarshal_allow_extra_keys = False
-
-    # Optional: Exclude any key whose value is None when marshalling
-    # The __init__ args this may affect should have a default value of None
-    # and type_assert(..., allow_none=True) in the assignment
-
-    # _marshal_exclude_none = True
-
-    # Optional: Exclude specific keys if their value is None when marshalling
-    # The corresponding __init__ args should have a default value of None
-    # and type_assert(..., allow_none=True) in the assignment
-    # There is no need to set this if _marshal_exclude_none == True
-
-    # _marshal_exclude_none_keys = ['key1', 'key2']
 
     def __init__(self, c):
         self.c = type_assert(c, float)
         # this will be ignored when marshalling because
         # of _marshal_exclude
-        self.z = None
+        self.z = "test"
 
+>>> # Unmarshal JSON data to an instance of ClassA
 >>> j = {"a": 6, "b": {"C": 4.2}}
 >>> # pass allow_extra_keys=False to raise an exception when j has
 >>> # extra keys not present in ClassA.__init__() arguments
@@ -77,6 +47,7 @@ class ClassB:
 6
 >>> obj1.b.c
 4.2
+>>> # Marshal an instance of ClassA to JSON-compatible data structures
 >>> obj2 = ClassA(12, ClassB(1.5))
 >>> marshal_json(obj2)
 {"a": 12, "b": {"C": 1.5}, "b2": None}
