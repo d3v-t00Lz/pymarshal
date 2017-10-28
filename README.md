@@ -11,6 +11,10 @@ Go's implementation such as:
 Currently supported formats:
   - JSON
   - BSON
+  - YAML
+
+As YAML is compatible with JSON, use PyYAML to load or dump data
+with the `pymarshal.json` module, there is no explicit YAML module.
 
 The only modification required to your class code is to use the `type_assert`
 functions to assign `__init__` arguments to self variables of the same
