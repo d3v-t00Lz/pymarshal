@@ -85,7 +85,9 @@ setuptools.setup(
         "golang",
         "json",
         "bson",
+        "yaml",
         "marshal",
         "unmarshal",
+        "struct",
     ],
 )
