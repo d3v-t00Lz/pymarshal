@@ -45,12 +45,13 @@ class ControlVars:
 
     # _marshal_exclude_none_keys = ['key1', 'key2']
 
-    def __init__(self, c):
+    def __init__(self, c, z="test", none=None):
         self.c = type_assert(c, float)
         # this will be ignored when marshalling because
         # of _marshal_exclude
-        self.z = "test"
+        self.z = type_assert(z, str)
         # this will be ignored when marshalling because
-        # of _marshal_exclude_none==True
-        self.none = None
+        # of _marshal_exclude_none==True, assuming the
+        # default value of None is used
+        self.none = type_assert(none, str, allow_none=True)
 ```
