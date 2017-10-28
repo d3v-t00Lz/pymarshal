@@ -12,6 +12,11 @@ from setuptools.command.test import test as TestCommand
 
 NAME = "pymarshal"
 URL = 'https://github.com/j3ffhubb/pymarshal'
+DESCRIPTION = (
+    "Pythonic implementation of Golang's (un)marshalling of structs "
+    "to/from various data serialization formats"
+)
+
 
 def _version():
     if 'test' in sys.argv:
@@ -56,7 +61,7 @@ setuptools.setup(
     author="Jeff Hubbard",
     author_email='j3ffhubb@users.noreply.github.com',
     license='BSD',
-    description="Pythonic implementation of Golang's (un)marshalling of JSON",
+    description=DESCRIPTION,
     long_description=open('README.md', 'rt').read(),
     url=URL,
     packages=setuptools.find_packages(
