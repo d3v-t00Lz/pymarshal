@@ -3,6 +3,8 @@
 """
 
 import bson
+import datetime
+
 import pytest
 
 from pymarshal.bson import *
@@ -45,21 +47,61 @@ def test_unmarshal_bson():
     assert not hasattr(obj.b, 'c')
 
 class FakeMongoDoc(MongoDocument):
-    def __init__(self, a, _id=None):
+    _marshal_exclude_none = True
+    def __init__(
+        self,
+        a,
+        b=None,
+        c=None,
+        _id=None,
+    ):
         self.a = type_assert(a, str)
+        self.b = type_assert(
+            b,
+            datetime.datetime,
+            allow_none=True,
+        )
+        self.c = type_assert(
+            c,
+            bson.ObjectId,
+            allow_none=True,
+        )
         self._id = type_assert(
             _id,
             bson.ObjectId,
             allow_none=True,
         )
 
-def test_mongodoc_json_include_id_true():
-    _id = bson.ObjectId()
-    a = FakeMongoDoc("b", _id)
-    assert a.json() == {"a": "b"}
-
 
 def test_mongodoc_json_include_id_false():
     _id = bson.ObjectId()
-    a = FakeMongoDoc("b", _id)
+    a = FakeMongoDoc("b", _id=_id)
+    assert a.json() == {"a": "b"}
+
+
+def test_mongodoc_json_include_id_true():
+    _id = bson.ObjectId()
+    a = FakeMongoDoc("b", _id=_id)
     assert a.json(include_id=True) == {"a": "b", "_id": str(_id)}
+
+
+def test_mongodoc_json_object_id_fmt_none():
+    _id = bson.ObjectId()
+    a = FakeMongoDoc("b", c=_id, _id=_id)
+    assert a.json(object_id_fmt=None) == {"a": "b"}
+
+
+def test_mongodoc_json_date_fmt_none():
+    _id = bson.ObjectId()
+    b = datetime.datetime.utcfromtimestamp(0)
+    a = FakeMongoDoc("b", b=b, _id=_id)
+    j = a.json(date_fmt=None)
+    assert b == datetime.datetime.fromtimestamp(j['b'])
+
+
+def test_mongodoc_json_date_fmt_str():
+    _id = bson.ObjectId()
+    b = datetime.datetime.utcfromtimestamp(0)
+    a = FakeMongoDoc("b", b=b, _id=_id)
+    j = a.json(date_fmt='%Y')
+    assert j['b'] == '1970'

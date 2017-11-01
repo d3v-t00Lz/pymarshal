@@ -20,16 +20,23 @@ class ExtraKeysError(Exception):
 def marshal_dict(
     obj,
     types,
+    method=None,
+    **method_kwargs
 ):
-    """ Recursively marshal a Python object to a JSON-compatible dict
+    """ Recursively marshal a Python object to a dict
         that can be passed to json.{dump,dumps}, a web client,
-        or a web server, etc...
+        or a web server, document database, etc...
 
         Args:
-            obj:   object, It's members can be nested Python
-                   objects which will be converted to dictionaries
-            types: tuple-of-types, The primitive types that can be
-                   serialized
+            obj:      object, It's members can be nested Python
+                      objects which will be converted to dictionaries
+            types:    tuple-of-types, The primitive types that can be
+                      serialized
+            method:   None-or-str, None to use 'marshal_dict' recursively,
+                      or a str that corresponds to the name of a class method
+                      to use.  Any nested types that are not an instance of
+                      @types must have this method defined.
+            m_kwargs: Keyword arguments to pass to @method
         Returns:
             dict
     """
@@ -47,7 +54,11 @@ def marshal_dict(
             excl.extend(x for x in none_keys if obj.__dict__.get(x) is None)
 
     return {
-        k: v if isinstance(v, types) else marshal_dict(v, types)
+        k: v if isinstance(v, types) else (
+            getattr(v, method)(**m_kwargs)
+            if method else
+            marshal_dict(v, types)
+        )
         for k, v in obj.__dict__.items()
         if k not in excl
     }

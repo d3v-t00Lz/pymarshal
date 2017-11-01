@@ -17,6 +17,8 @@ def _check(
     obj,
     cls,
     allow_none=False,
+    cast_from=None,
+    cast_to=None,
 ):
     if (
         allow_none
@@ -24,6 +26,9 @@ def _check(
         obj is None
     ):
         return obj
+
+    if cast_from and isinstance(obj, cast_from):
+        return cast_to(obj)
 
     if not isinstance(obj, cls):
         if isinstance(obj, dict):
@@ -42,8 +47,10 @@ def type_assert(
     obj,
     cls,
     allow_none=False,
+    cast_from=None,
+    cast_to=None,
 ):
-    """ Wrapper function for isinstance.
+    """ Assert that @obj is an instance of @cls
 
         Note that you cannot use this to unmarshal JSON if @cls
         is a tuple of types, it can only be a single type.
@@ -52,8 +59,13 @@ def type_assert(
         is an instance of dict and @cls is not dict
 
         Args:
-            obj: object instance, The object to type assert
-            cls: type, The class type to assert
+            obj:        object instance, The object to type assert
+            cls: type,  The class type to assert
+            allow_none: bool, True to allow '@obj is None', otherwise False
+            cast_from:  type-or-tuple-of-types, If @obj is an instance
+                        of this type(s), cast it to @cast_to
+            cast_to:    type, The type to cast @obj to if it's an instance
+                        of @cast_from
         Returns:
             @obj
         Raises:
@@ -63,12 +75,16 @@ def type_assert(
         obj,
         cls,
         allow_none,
+        cast_from,
+        cast_to,
     )
 
 
 def type_assert_iter(
     iterable,
     cls,
+    cast_from=None,
+    cast_to=None,
 ):
     """ Checks that every object in @iterable is an instance of @cls
 
@@ -79,6 +95,10 @@ def type_assert_iter(
             iterable:   Any iterable to check.  Note that it would not
                         make sense to pass a generator to this function
             cls:        type, The class type to assert
+            cast_from:  type-or-tuple-of-types, If @obj is an instance
+                        of this type(s), cast it to @cast_to
+            cast_to:    type, The type to cast @obj to if it's an instance
+                        of @cast_from
         Returns:
             @iterable, note that @iterable will be recreated, which
             may be a performance concern if @iterable has many items
@@ -87,7 +107,7 @@ def type_assert_iter(
     """
     t = type(iterable)
     return t(
-        _check(obj, cls) for obj in iterable
+        _check(obj, cls, False, cast_from, cast_to) for obj in iterable
     )
 
 
@@ -96,6 +116,8 @@ def type_assert_dict(
     kcls=None,
     vcls=None,
     allow_none=False,
+    cast_from=None,
+    cast_to=None,
 ):
     """ Checks that every key/value in @d is an instance of @kcls: @vcls
 
@@ -103,12 +125,16 @@ def type_assert_dict(
         the value is an instance of dict and @vcls is a class type
 
         Args:
-            d:           The dict to type assert
-            @kcls:       The class to type assert for keys.
-                         NOTE: JSON only allows str keys
-            @vcls:       The class to type assert for values
-            @allow_none: Allow a None value for the values.
-                         This would not make sense for the keys.
+            d:          The dict to type assert
+            kcls:       The class to type assert for keys.
+                        NOTE: JSON only allows str keys
+            vcls:       The class to type assert for values
+            allow_none: Allow a None value for the values.
+                        This would not make sense for the keys.
+            cast_from:  type-or-tuple-of-types, If @obj is an instance
+                        of this type(s), cast it to @cast_to
+            cast_to:    type, The type to cast @obj to if it's an instance
+                        of @cast_from
         Returns:
             @d, note that @d will be recreated, which
             may be a performance concern if @d has many items
@@ -120,7 +146,7 @@ def type_assert_dict(
     return t(
         (
             _check(k, kcls) if kcls else k,
-            _check(v, vcls, allow_none) if vcls else v,
+            _check(v, vcls, allow_none, cast_from, cast_to) if vcls else v,
         )
         for k, v in d.items()
     )

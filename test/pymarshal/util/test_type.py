@@ -28,12 +28,24 @@ def test_type_assert_allow_none():
 
 
 def test_type_assert_raises():
-    for obj, obj_type in (
+    for obj, cls in (
         (5, float),
         (4.2, int),
     ):
         with pytest.raises(TypeError):
-            type_assert(obj, obj_type)
+            type_assert(obj, cls)
+
+
+def test_type_assert_cast_from():
+    for obj, cls, cast_from, cast_to, expected in (
+        ("5", int, str, int, 5),
+    ):
+        assert type_assert(
+            obj,
+            cls,
+            cast_from=cast_from,
+            cast_to=cast_to,
+        ) == expected
 
 
 def test_type_assert_iter():
