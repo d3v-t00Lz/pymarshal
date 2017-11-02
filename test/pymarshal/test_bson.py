@@ -53,6 +53,7 @@ class FakeMongoDoc(MongoDocument):
         a,
         b=None,
         c=None,
+        d=None,
         _id=None,
     ):
         self.a = type_assert(a, str)
@@ -64,6 +65,11 @@ class FakeMongoDoc(MongoDocument):
         self.c = type_assert(
             c,
             bson.ObjectId,
+            allow_none=True,
+        )
+        self.d = type_assert(
+            d,
+            FakeMongoDoc,
             allow_none=True,
         )
         self._id = type_assert(
@@ -105,3 +111,13 @@ def test_mongodoc_json_date_fmt_str():
     a = FakeMongoDoc("b", b=b, _id=_id)
     j = a.json(date_fmt='%Y')
     assert j['b'] == '1970'
+
+
+def test_mongodoc_nested():
+    d = FakeMongoDoc(
+        'a',
+        d=FakeMongoDoc('b'),
+    )
+    j = d.json()
+    assert j['d']['a'] == 'b'
+

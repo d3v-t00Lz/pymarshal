@@ -21,7 +21,7 @@ def marshal_dict(
     obj,
     types,
     method=None,
-    **method_kwargs
+    **m_kwargs
 ):
     """ Recursively marshal a Python object to a dict
         that can be passed to json.{dump,dumps}, a web client,
