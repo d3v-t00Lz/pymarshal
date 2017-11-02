@@ -13,6 +13,17 @@ __all__ = [
 ]
 
 
+def _msg(
+    obj,
+    cls,
+):
+    return '{0} is not an instance of {1}, is {2}'.format(
+        obj,
+        cls,
+        type(obj),
+    )
+
+
 def _check(
     obj,
     cls,
@@ -27,18 +38,25 @@ def _check(
     ):
         return obj
 
-    if cast_from and isinstance(obj, cast_from):
-        return cast_to(obj)
+    if (
+        cast_from
+        and
+        isinstance(obj, cast_from)
+    ):
+        if cast_to:
+            cast = cast_to(obj)
+            if not isinstance(cast, cls):
+                msg = _msg(obj, cls)
+                raise TypeError(msg)
+            return cast
+        else:
+            return cls(obj)
 
     if not isinstance(obj, cls):
         if isinstance(obj, dict):
             obj = key_swap(obj, cls, True)
             return unmarshal_dict(obj, cls)
-        msg = '{0} is not an instance of {1}, is {2}'.format(
-            obj,
-            cls,
-            type(obj),
-        )
+        msg = _msg(obj, cls)
         raise TypeError(msg)
     return obj
 
@@ -60,12 +78,14 @@ def type_assert(
 
         Args:
             obj:        object instance, The object to type assert
-            cls: type,  The class type to assert
+            cls:        type,  The class type to assert
             allow_none: bool, True to allow '@obj is None', otherwise False
             cast_from:  type-or-tuple-of-types, If @obj is an instance
                         of this type(s), cast it to @cast_to
             cast_to:    type, The type to cast @obj to if it's an instance
-                        of @cast_from
+                        of @cast_from, or None to cast to @cls.
+                        If you need more than type(x), use a lambda or
+                        factory function.
         Returns:
             @obj
         Raises:
@@ -98,7 +118,9 @@ def type_assert_iter(
             cast_from:  type-or-tuple-of-types, If @obj is an instance
                         of this type(s), cast it to @cast_to
             cast_to:    type, The type to cast @obj to if it's an instance
-                        of @cast_from
+                        of @cast_from, or None to cast to @cls.
+                        If you need more than type(x), use a lambda or
+                        factory function.
         Returns:
             @iterable, note that @iterable will be recreated, which
             may be a performance concern if @iterable has many items
@@ -134,7 +156,9 @@ def type_assert_dict(
             cast_from:  type-or-tuple-of-types, If @obj is an instance
                         of this type(s), cast it to @cast_to
             cast_to:    type, The type to cast @obj to if it's an instance
-                        of @cast_from
+                        of @cast_from, or None to cast to @cls.
+                        If you need more than type(x), use a lambda or
+                        factory function.
         Returns:
             @d, note that @d will be recreated, which
             may be a performance concern if @d has many items

@@ -36,9 +36,24 @@ def test_type_assert_raises():
             type_assert(obj, cls)
 
 
+def test_type_assert_cast_raises():
+    for obj, cls, cast_from, cast_to in (
+        (5, float, int, str),
+    ):
+        with pytest.raises(TypeError):
+            type_assert(
+                obj,
+                cls,
+                cast_from=cast_from,
+                cast_to=cast_to,
+            )
+
+
 def test_type_assert_cast_from():
     for obj, cls, cast_from, cast_to, expected in (
         ("5", int, str, int, 5),
+        ("5", int, str, None, 5),
+        ("0xff", int, str, lambda x: int(x, 16), 255),
     ):
         assert type_assert(
             obj,
