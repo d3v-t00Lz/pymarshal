@@ -3,6 +3,8 @@
 # cast types.  This is useful when converting incompatible
 # types from JSON to BSON, for example.
 
+# Casting should be used sparingly.  If the data is transmitted
+# bidirectionally between 2 services, you should not use casting.
 
 class A:
     def __init__(
