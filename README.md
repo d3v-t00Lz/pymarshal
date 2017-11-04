@@ -30,6 +30,10 @@ functions to assign `__init__` arguments to self variables of the same
 name.  pymarshal provides the `type_assert` functions to both enforce the type,
 and to unmarshal nested objects.
 
+NOTE:  Your classes must not implement `__call__` (which is an antipattern
+anyway).  Whatever you would've implemented with `__call__` should just be
+a normal, named method.
+
 Your `__init__` methods should only use simple assignment through the
 `type_assert` functions.  If you have a use-case for a constructor that
 does more than simple assignment, use a separate
