@@ -3,11 +3,11 @@
     struct (un)marshalling feature to/from JSON.
 
     For examples, see:
-    https://github.com/j3ffhubb/pymarshal/blob/master/README.rst
+    https://github.com/j3ffhubb/pymarshal/blob/master/README.md
 """
 
 from . import json
 from .json import *
 
-__version__ = '1.2.2'
+__version__ = '1.3.0'
 __all__ = json.__all__
