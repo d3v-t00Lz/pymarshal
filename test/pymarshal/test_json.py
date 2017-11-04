@@ -10,6 +10,8 @@ from pymarshal.json import *
 def test_marshal_json():
     class DummyClass:
         _marshal_exclude = ['d']
+        def __init__(self):
+            pass
 
     obj = DummyClass()
     obj.a = DummyClass()
@@ -126,4 +128,21 @@ def test_unmarshal_json_allow_extra_keys():
 
     assert obj.a == 5
     assert not hasattr(obj, 'b')
+
+
+def test_unmarshal_json_factory_function():
+    class TestClassA:
+        def __init__(self, a, b):
+            self.a = type_assert(a, str)
+            self.b = type_assert(b, str)
+
+    def factory(a, b):
+        return TestClassA(
+            str(a),
+            str(b),
+        )
+
+    t = unmarshal_json({'a': 1, 'b': 2}, factory)
+    assert t.a == '1'
+    assert t.b == '2'
 

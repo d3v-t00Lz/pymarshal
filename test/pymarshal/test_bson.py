@@ -13,6 +13,8 @@ from pymarshal.bson import *
 def test_marshal_bson():
     class DummyClass:
         _marshal_exclude = ['d']
+        def __init__(self):
+            pass
 
     _id = bson.ObjectId()
 

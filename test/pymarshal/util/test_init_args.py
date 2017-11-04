@@ -13,3 +13,10 @@ def test_init_args():
     assert init_args(C) == expected  # class
     assert init_args(C(1, 2)) == expected  # instance
 
+
+def test_init_args_factory_function():
+    def factory(a, b):
+        pass
+
+    expected = ['a', 'b']
+    assert init_args(factory) == expected
