@@ -20,3 +20,16 @@ def test_init_args_factory_function():
 
     expected = ['a', 'b']
     assert init_args(factory) == expected
+
+
+def test_init_args_factory_method():
+    class A:
+        def __init__(self, a, b, c):
+            pass
+
+        @staticmethod
+        def factory(a, b):
+            pass
+
+    expected = ['a', 'b']
+    assert init_args(A.factory) == expected
