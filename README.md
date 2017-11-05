@@ -23,6 +23,9 @@ using `pip install pymarshal`
 
 pymarshal is compatible with Python2.7, and Python3.x
 
+[CLICK HERE](https://github.com/j3ffhubb/mpwdga) for an example of a
+modern REST API that uses PyMarshal
+
 ## Overview
 
 The only modification required to your class code is to use the `type_assert`
