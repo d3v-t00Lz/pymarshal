@@ -63,6 +63,32 @@ def test_type_assert_cast_from():
         ) == expected
 
 
+def test_type_assert_dynamic():
+    for obj, cls, dynamic, expected in (
+        (None, int, 50, 50),
+        (None, str, "test", "test"),
+        ("test", str, "nope", "test"),
+    ):
+        assert type_assert(
+            obj,
+            cls,
+            dynamic=dynamic,
+        ) == expected
+
+
+def test_type_assert_dynamic_raises():
+    for obj, cls, dynamic, ex in (
+        (None, int, "50", TypeError),
+        (None, str, 15, TypeError),
+    ):
+        with pytest.raises(ex):
+            type_assert(
+                obj,
+                cls,
+                dynamic=dynamic,
+            )
+
+
 def test_type_assert_iter():
     for obj, obj_type in (
         ([5, 6, 7], int),

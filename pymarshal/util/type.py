@@ -30,6 +30,7 @@ def _check(
     allow_none=False,
     cast_from=None,
     cast_to=None,
+    dynamic=None,
 ):
     if (
         allow_none
@@ -39,6 +40,16 @@ def _check(
         return obj
 
     if (
+        obj is None
+        and
+        dynamic is not None
+    ):
+        if not isinstance(dynamic, cls):
+            msg = _msg(dynamic, cls)
+            raise TypeError(msg)
+        return dynamic
+
+    if (
         cast_from
         and
         isinstance(obj, cast_from)
@@ -46,7 +57,7 @@ def _check(
         if cast_to:
             cast = cast_to(obj)
             if not isinstance(cast, cls):
-                msg = _msg(obj, cls)
+                msg = _msg(cast, cls)
                 raise TypeError(msg)
             return cast
         else:
@@ -58,6 +69,7 @@ def _check(
             return unmarshal_dict(obj, cls)
         msg = _msg(obj, cls)
         raise TypeError(msg)
+
     return obj
 
 
@@ -67,6 +79,7 @@ def type_assert(
     allow_none=False,
     cast_from=None,
     cast_to=None,
+    dynamic=None,
 ):
     """ Assert that @obj is an instance of @cls
 
@@ -86,6 +99,14 @@ def type_assert(
                         of @cast_from, or None to cast to @cls.
                         If you need more than type(x), use a lambda or
                         factory function.
+            dynamic:    @cls, A dynamic default value if @obj is None,
+                        and @dynamic is not None.  @allow_none should be False
+                        Valid uses:
+                            datetime.datetime.now()
+                            int(time.time())
+                            # Or, to avoid the Python singleton bug when
+                            # using arg=[], for example:
+                            [], {}, set()
         Returns:
             @obj
         Raises:
@@ -97,6 +118,7 @@ def type_assert(
         allow_none,
         cast_from,
         cast_to,
+        dynamic=dynamic,
     )
 
 
