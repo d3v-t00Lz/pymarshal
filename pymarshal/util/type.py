@@ -127,6 +127,7 @@ def type_assert_iter(
     cls,
     cast_from=None,
     cast_to=None,
+    dynamic=None,
 ):
     """ Checks that every object in @iterable is an instance of @cls
 
@@ -143,12 +144,20 @@ def type_assert_iter(
                         of @cast_from, or None to cast to @cls.
                         If you need more than type(x), use a lambda or
                         factory function.
+            dynamic:    @cls, A dynamic default value if @iterable is None,
+                        and @dynamic is not None.
         Returns:
             @iterable, note that @iterable will be recreated, which
             may be a performance concern if @iterable has many items
         Raises:
             TypeError: if @obj is not an instance of @cls
     """
+    if (
+        iterable is None
+        and
+        dynamic is not None
+    ):
+        iterable = dynamic
     t = type(iterable)
     return t(
         _check(obj, cls, False, cast_from, cast_to) for obj in iterable
@@ -162,6 +171,7 @@ def type_assert_dict(
     allow_none=False,
     cast_from=None,
     cast_to=None,
+    dynamic=None,
 ):
     """ Checks that every key/value in @d is an instance of @kcls: @vcls
 
@@ -181,6 +191,8 @@ def type_assert_dict(
                         of @cast_from, or None to cast to @cls.
                         If you need more than type(x), use a lambda or
                         factory function.
+            dynamic:    @cls, A dynamic default value if @d is None,
+                        and @dynamic is not None.
         Returns:
             @d, note that @d will be recreated, which
             may be a performance concern if @d has many items
@@ -188,6 +200,12 @@ def type_assert_dict(
             TypeError: if a key is not an instance of @kcls or
                        a value is not an instance of @vcls
     """
+    if (
+        d is None
+        and
+        dynamic is not None
+    ):
+        d = dynamic
     t = type(d)
     return t(
         (
