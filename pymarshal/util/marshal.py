@@ -8,6 +8,7 @@ from .key_swap import key_swap
 
 __all__ = [
     'ExtraKeysError',
+    'InitArgsError',
     'marshal_dict',
     'unmarshal_dict',
 ]
@@ -15,6 +16,36 @@ __all__ = [
 
 class ExtraKeysError(Exception):
     """ Raised when extra object keys are present """
+
+
+class InitArgsError(Exception):
+    """ Raised when unmarshalling a class raises an Exception
+
+        This exception can be marshalled into JSON for sending
+        to clients.  However, it cannot be unmarshalled back into
+        an InitArgsError
+    """
+    def __init__(
+        self,
+        cls,
+        args,
+        kwargs,
+        ex,
+    ):
+        """ Note that type_assert can't be used because it would
+            create a circular dependency.
+
+        Args:
+            cls,    type, The type that was attempted to unmarshal into
+            args:   list, The arguments of @cls
+            kwargs: dict, The arguments that were passed to @cls
+            ex:     Exception, The exception that was raised
+        """
+        super().__init__()
+        self.cls = str(cls)
+        self.args = str(args)
+        self.kwargs = str(kwargs)
+        self.ex = str(ex)
 
 
 def marshal_dict(
@@ -103,5 +134,15 @@ def unmarshal_dict(
         )
         raise ExtraKeysError(msg)
 
-    return cls(**kwargs)
+    try:
+        return cls(**kwargs)
+    except ExtraKeysError as ex:
+        raise ex
+    except Exception as ex:
+        raise InitArgsError(
+            cls,
+            args,
+            kwargs,
+            ex,
+        )
 

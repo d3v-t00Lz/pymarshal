@@ -17,6 +17,7 @@ from .util.type import *
 __all__ = [
     'bson',
     'ExtraKeysError',
+    'InitArgsError',
     'marshal_bson',
     'MongoDocument',
     'type_assert',

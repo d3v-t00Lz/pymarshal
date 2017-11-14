@@ -8,6 +8,7 @@ from .util.type import *
 
 __all__ = [
     'ExtraKeysError',
+    'InitArgsError',
     'marshal_json',
     'type_assert',
     'type_assert_dict',

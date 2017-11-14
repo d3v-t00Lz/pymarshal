@@ -115,6 +115,20 @@ def test_unmarshal_json_raises_extra_keys_error_from_cls():
         )
 
 
+def test_unmarshal_json_raises_init_args_error():
+    class TestClassA:
+        def __init__(self, a, b):
+            self.a = type_assert(a, int)
+            self.b = type_assert(b, int)
+
+    with pytest.raises(InitArgsError):
+        unmarshal_json(
+            {'a': 5, 'b': 'd'},
+            TestClassA,
+            allow_extra_keys=True,
+        )
+
+
 def test_unmarshal_json_allow_extra_keys():
     class TestClassA:
         def __init__(self, a):
