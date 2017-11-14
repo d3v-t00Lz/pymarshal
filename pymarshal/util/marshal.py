@@ -28,7 +28,7 @@ class InitArgsError(Exception):
     def __init__(
         self,
         cls,
-        args,
+        cls_args,
         kwargs,
         ex,
     ):
@@ -36,14 +36,14 @@ class InitArgsError(Exception):
             create a circular dependency.
 
         Args:
-            cls,    type, The type that was attempted to unmarshal into
-            args:   list, The arguments of @cls
-            kwargs: dict, The arguments that were passed to @cls
-            ex:     Exception, The exception that was raised
+            cls,      type, The type that was attempted to unmarshal into
+            cls_args: list, The arguments of @cls
+            kwargs:   dict, The arguments that were passed to @cls
+            ex:       Exception, The exception that was raised
         """
         super().__init__()
         self.cls = str(cls)
-        self.args = str(args)
+        self.cls_args = str(cls_args)
         self.kwargs = str(kwargs)
         self.ex = str(ex)
 
