@@ -15,7 +15,30 @@ __all__ = [
 
 
 class ExtraKeysError(Exception):
-    """ Raised when extra object keys are present """
+    """ Raised when extra object keys are present
+
+        This exception can be marshalled into JSON for sending
+        to clients.  However, it cannot be unmarshalled back into
+        an ExtraKeysError
+    """
+    def __init__(
+        self,
+        cls,
+        diff,
+    ):
+        """ Note that type_assert can't be used because it would
+            create a circular dependency.
+
+        Args:
+            cls,  type, The type that was attempted to unmarshal into
+            diff: dict, The extra arguments that were passed to @cls
+        """
+        super().__init__()
+        self.type = str(
+            type(self),
+        )
+        self.cls = str(cls)
+        self.diff = str(diff)
 
 
 class InitArgsError(Exception):
@@ -42,6 +65,9 @@ class InitArgsError(Exception):
             ex:       Exception, The exception that was raised
         """
         super().__init__()
+        self.type = str(
+            type(self),
+        )
         self.cls = str(cls)
         self.cls_args = str(cls_args)
         self.kwargs = str(kwargs)
@@ -128,11 +154,7 @@ def unmarshal_dict(
 
     if not allow_extra_keys and len(obj) > len(kwargs):
         diff = {k: v for k, v in obj.items() if k not in args}
-        msg = "Extra keys present, but allow_extra_keys=={}: {}".format(
-            allow_extra_keys,
-            diff,
-        )
-        raise ExtraKeysError(msg)
+        raise ExtraKeysError(cls, diff)
 
     try:
         return cls(**kwargs)
