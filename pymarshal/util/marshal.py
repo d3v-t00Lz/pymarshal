@@ -33,7 +33,7 @@ class ExtraKeysError(Exception):
             cls,  type, The type that was attempted to unmarshal into
             diff: dict, The extra arguments that were passed to @cls
         """
-        super().__init__()
+        Exception.__init__(self)
         self.type = str(
             type(self),
         )
@@ -65,7 +65,7 @@ class InitArgsError(Exception):
             kwargs:   dict, The arguments that were passed to @cls
             ex:       Exception, The exception that was raised
         """
-        super().__init__()
+        Exception.__init__(self)
         self.type = str(
             type(self),
         )
