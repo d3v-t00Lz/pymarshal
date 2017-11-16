@@ -87,12 +87,13 @@ class MongoDocument:
         Returns:
             dict
         """
+        has_slots, d = _get_dict(self)
         _id = self._id
         if not include_id:
             self._id = None
 
         object_ids = {
-            k: v for k, v in self.__dict__.items()
+            k: v for k, v in d.items()
             if isinstance(v, bson.ObjectId)
         }
 
@@ -103,7 +104,7 @@ class MongoDocument:
                 setattr(self, k, object_id_fmt(v))
 
         datetimes = {
-            k: v for k, v in self.__dict__.items()
+            k: v for k, v in d.items()
             if isinstance(v, datetime.datetime)
         }
 

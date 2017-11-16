@@ -168,6 +168,9 @@ def test_marshal_slots():
             self.a = type_assert(a, int)
             self.b = type_assert(b, int)
 
+        def method(self):
+            pass
+
     t = Test(1, 2)
     j = marshal_json(t)
     assert j['a'] == 1

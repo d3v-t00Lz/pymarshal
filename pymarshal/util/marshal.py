@@ -8,11 +8,24 @@ from .key_swap import key_swap
 
 __all__ = [
     'ExtraKeysError',
+    '_get_dict',
     'InitArgsError',
     'marshal_dict',
     'unmarshal_dict',
 ]
 
+
+
+def _get_dict(obj):
+    """ Hack to work around the lack of __dict__ when __slots__ is used
+
+    """
+    has_slots = hasattr(obj, '__slots__')
+    if has_slots:
+        d = {k:getattr(obj, k) for k in obj.__slots__}
+    else:
+        d = obj.__dict__
+    return has_slots, d
 
 class ExtraKeysError(Exception):
     """ Raised when extra object keys are present
@@ -99,11 +112,13 @@ def marshal_dict(
         Returns:
             dict
     """
-    if hasattr(obj, '__slots__'):
-        d = {k:getattr(obj, k) for k in obj.__slots__}
-    else:
-        d = obj.__dict__
-    if getattr(obj, '_marshal_only_init_args', False):
+    has_slots, d = _get_dict(obj)
+
+    if (
+        has_slots
+        or
+        getattr(obj, '_marshal_only_init_args', False)
+    ):
         args = init_args(obj)
         excl = [x for x in d if x not in args]
     else:
