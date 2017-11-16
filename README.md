@@ -35,7 +35,8 @@ and to unmarshal nested objects.
 
 NOTE:  Your classes must not implement `__call__` (which is an antipattern
 anyway).  Whatever you would've implemented with `__call__` should just be
-a normal, named method.
+a normal, named method.  Also, support for classes using `__slots__` is
+not yet implemented.
 
 Your `__init__` methods should only use simple assignment through the
 `type_assert` functions.  If you have a use-case for a constructor that
