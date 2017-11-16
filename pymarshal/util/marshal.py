@@ -99,18 +99,22 @@ def marshal_dict(
         Returns:
             dict
     """
+    if hasattr(obj, '__slots__'):
+        d = {k:getattr(obj, k) for k in obj.__slots__}
+    else:
+        d = obj.__dict__
     if getattr(obj, '_marshal_only_init_args', False):
         args = init_args(obj)
-        excl = [x for x in obj.__dict__ if x not in args]
+        excl = [x for x in d if x not in args]
     else:
         excl = getattr(obj, '_marshal_exclude', [])
 
     if getattr(obj, '_marshal_exclude_none', False):
-        excl.extend(k for k, v in obj.__dict__.items() if v is None)
+        excl.extend(k for k, v in d.items() if v is None)
     else:
         none_keys = getattr(obj, '_marshal_exclude_none_keys', [])
         if none_keys:
-            excl.extend(x for x in none_keys if obj.__dict__.get(x) is None)
+            excl.extend(x for x in none_keys if d.get(x) is None)
 
     return {
         k: v if isinstance(v, types) else (
@@ -118,7 +122,7 @@ def marshal_dict(
             if method else
             marshal_dict(v, types)
         )
-        for k, v in obj.__dict__.items()
+        for k, v in d.items()
         if k not in excl
     }
 

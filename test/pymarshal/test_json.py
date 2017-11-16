@@ -160,3 +160,20 @@ def test_unmarshal_json_factory_function():
     assert t.a == '1'
     assert t.b == '2'
 
+
+def test_marshal_slots():
+    class Test:
+        __slots__ = ['a', 'b']
+        def __init__(self, a, b):
+            self.a = type_assert(a, int)
+            self.b = type_assert(b, int)
+
+    t = Test(1, 2)
+    j = marshal_json(t)
+    assert j['a'] == 1
+    assert j['b'] == 2
+
+    t2 = unmarshal_json(j, Test)
+    assert t.a == 1
+    assert t.b == 2
+
