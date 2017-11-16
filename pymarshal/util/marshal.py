@@ -39,6 +39,7 @@ class ExtraKeysError(Exception):
         )
         self.cls = str(cls)
         self.diff = str(diff)
+        self.type = self.__class__.__name__
 
 
 class InitArgsError(Exception):
@@ -72,6 +73,7 @@ class InitArgsError(Exception):
         self.cls_args = str(cls_args)
         self.kwargs = str(kwargs)
         self.ex = str(ex)
+        self.type = self.__class__.__name__
 
 
 def marshal_dict(
