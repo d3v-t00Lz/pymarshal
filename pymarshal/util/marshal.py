@@ -114,15 +114,15 @@ def marshal_dict(
     """
     has_slots, d = _get_dict(obj)
 
+    excl = getattr(obj, '_marshal_exclude', [])
+
     if (
         has_slots
         or
         getattr(obj, '_marshal_only_init_args', False)
     ):
         args = init_args(obj)
-        excl = [x for x in d if x not in args]
-    else:
-        excl = getattr(obj, '_marshal_exclude', [])
+        excl.extend([x for x in d if x not in args])
 
     if getattr(obj, '_marshal_exclude_none', False):
         excl.extend(k for k, v in d.items() if v is None)

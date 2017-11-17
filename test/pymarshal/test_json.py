@@ -35,6 +35,19 @@ def test_marshal_json_marshal_only_init_args_true():
     assert j == {'a': 10}
 
 
+def test_marshal_json_marshal_exclude_and_only_init_args():
+    class DummyClass:
+        _marshal_exclude = ['b']
+        _marshal_only_init_args = True
+        def __init__(self, a, b):
+            self.a = a
+            self.b = b
+
+    obj = DummyClass(10, 20)
+    j = marshal_json(obj)
+    assert j == {'a': 10}
+
+
 def test_marshal_json_marshal_exclude_none():
     class DummyClass:
         _marshal_exclude_none = True
