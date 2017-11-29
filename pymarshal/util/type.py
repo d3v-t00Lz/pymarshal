@@ -73,6 +73,16 @@ def _check(
     return obj
 
 
+def _check_dstruct(obj, cls):
+    if (
+        cls is not None
+        and
+        not isinstance(obj, cls)
+    ):
+        msg = _msg(obj, cls)
+        raise TypeError(msg)
+
+
 def type_assert(
     obj,
     cls,
@@ -128,6 +138,7 @@ def type_assert_iter(
     cast_from=None,
     cast_to=None,
     dynamic=None,
+    objcls=None,
 ):
     """ Checks that every object in @iterable is an instance of @cls
 
@@ -137,7 +148,8 @@ def type_assert_iter(
         Args:
             iterable:   Any iterable to check.  Note that it would not
                         make sense to pass a generator to this function
-            cls:        type, The class type to assert
+            cls:        type, The class type to assert each member
+                        of @iterable is
             cast_from:  type-or-tuple-of-types, If @obj is an instance
                         of this type(s), cast it to @cast_to
             cast_to:    type, The type to cast @obj to if it's an instance
@@ -146,12 +158,15 @@ def type_assert_iter(
                         factory function.
             dynamic:    @cls, A dynamic default value if @iterable is None,
                         and @dynamic is not None.
+            objcls:     None-or-type, a type to assert @iterable is,
+                        ie:  list, set, etc...
         Returns:
             @iterable, note that @iterable will be recreated, which
             may be a performance concern if @iterable has many items
         Raises:
             TypeError: if @obj is not an instance of @cls
     """
+    _check_dstruct(iterable, objcls)
     if (
         iterable is None
         and
@@ -172,6 +187,7 @@ def type_assert_dict(
     cast_from=None,
     cast_to=None,
     dynamic=None,
+    objcls=None,
 ):
     """ Checks that every key/value in @d is an instance of @kcls: @vcls
 
@@ -193,6 +209,10 @@ def type_assert_dict(
                         factory function.
             dynamic:    @cls, A dynamic default value if @d is None,
                         and @dynamic is not None.
+            objcls:     None-or-type, a type to assert @d is,
+                        ie:  dict, etc...
+                        Note that isinstance considers
+                        collections.OrderedDict to be of type dict
         Returns:
             @d, note that @d will be recreated, which
             may be a performance concern if @d has many items
@@ -200,6 +220,8 @@ def type_assert_dict(
             TypeError: if a key is not an instance of @kcls or
                        a value is not an instance of @vcls
     """
+    _check_dstruct(d, objcls)
+
     if (
         d is None
         and

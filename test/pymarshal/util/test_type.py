@@ -2,9 +2,30 @@
 
 """
 
+import collections
 import pytest
 
 from pymarshal.util.type import *
+from pymarshal.util.type import _check_dstruct
+
+
+def test_check_dstruct():
+    for obj, cls in (
+        ([], list),
+        (set(), set),
+        ({}, dict),
+    ):
+        _check_dstruct(obj, cls)
+
+
+def test_check_dstruct_raises():
+    for obj, cls in (
+        ([], dict),
+        ({}, collections.OrderedDict),
+        #(collections.OrderedDict(), dict),
+    ):
+        with pytest.raises(TypeError):
+            _check_dstruct(obj, cls)
 
 
 def test_type_assert():
