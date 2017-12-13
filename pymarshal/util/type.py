@@ -83,6 +83,16 @@ def _check_dstruct(obj, cls):
         raise TypeError(msg)
 
 
+def _check_choices(obj, choices):
+    if (
+        choices is not None
+        and
+        obj not in choices
+    ):
+        msg = "{} not in {}".format(obj, choices)
+        raise ValueError(msg)
+
+
 def type_assert(
     obj,
     cls,
@@ -90,6 +100,7 @@ def type_assert(
     cast_from=None,
     cast_to=None,
     dynamic=None,
+    choices=None,
 ):
     """ Assert that @obj is an instance of @cls
 
@@ -117,11 +128,15 @@ def type_assert(
                             # Or, to avoid the Python singleton bug when
                             # using arg=[], for example:
                             [], {}, set()
+            choices:    iterable-or-None, If not None, @obj must
+                        be in @choices
         Returns:
             @obj
         Raises:
             TypeError: if @obj is not an instance of @cls
     """
+    _check_choices(obj, choices)
+
     return _check(
         obj,
         cls,
@@ -139,6 +154,7 @@ def type_assert_iter(
     cast_to=None,
     dynamic=None,
     objcls=None,
+    choices=None,
 ):
     """ Checks that every object in @iterable is an instance of @cls
 
@@ -167,6 +183,11 @@ def type_assert_iter(
             TypeError: if @obj is not an instance of @cls
     """
     _check_dstruct(iterable, objcls)
+
+    if choices is not None:
+        for obj in iterable:
+            _check_choices(obj, choices)
+
     if (
         iterable is None
         and

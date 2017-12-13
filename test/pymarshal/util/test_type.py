@@ -6,7 +6,10 @@ import collections
 import pytest
 
 from pymarshal.util.type import *
-from pymarshal.util.type import _check_dstruct
+from pymarshal.util.type import (
+    _check_choices,
+    _check_dstruct,
+)
 
 
 def test_check_dstruct():
@@ -26,6 +29,24 @@ def test_check_dstruct_raises():
     ):
         with pytest.raises(TypeError):
             _check_dstruct(obj, cls)
+
+
+def test_check_choices():
+    for obj, choices in [
+        (5, [1, 3, 5]),
+        ("a", set(["a", "b", "c"])),
+    ]:
+        # should not raise
+        _check_choices(obj, choices)
+
+
+def test_check_choices():
+    for obj, choices in [
+        (4, [1, 3, 5]),
+        ("d", set(["a", "b", "c"])),
+    ]:
+        with pytest.raises(ValueError):
+            _check_choices(obj, choices)
 
 
 def test_type_assert():
@@ -128,6 +149,16 @@ def test_type_assert_iter_dynamic():
     ):
         # should not raise
         assert dynamic == type_assert_iter(None, obj_type, dynamic=dynamic)
+
+
+def test_type_assert_iter_choices():
+    for obj, obj_type in (
+        ([5, 6, 7], int),
+        ([4.2, 5.7, 9.2], float),
+        ([object()], object),
+    ):
+        # should not raise
+        assert obj == type_assert_iter(obj, obj_type, choices=obj)
 
 
 def test_type_assert_dict():
