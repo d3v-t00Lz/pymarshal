@@ -176,6 +176,8 @@ def type_assert_iter(
                         and @dynamic is not None.
             objcls:     None-or-type, a type to assert @iterable is,
                         ie:  list, set, etc...
+            choices:    iterable-or-None, If not None, each object in
+                        @iterable must be in @choices
         Returns:
             @iterable, note that @iterable will be recreated, which
             may be a performance concern if @iterable has many items
