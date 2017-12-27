@@ -1,19 +1,19 @@
 ```python
 class ControlVars:
-    # Optional: Replaces keys in the JSON object before
+    # Optional: Replaces keys in the object to unmarshal before
     # passing to __init__()
-    # Useful for JSON keys that are not valid Python variable names
+    # Useful for keys that are not valid Python variable names
     _unmarshal_key_swap = {
         "C": "c",
     }
-    # Optional: Controls mapping the keys back to JSON.
+    # Optional: Renames keys on the fly when marshalling.
     # If unmarshalling doesn't map multiple keys to the same value,
     # you can simply use:
-    # {v: k for k, v in _unmarshal_key_swap.items()}
+    # _marshal_key_swap = {v: k for k, v in _unmarshal_key_swap.items()}
     _marshal_key_swap = {
         "c": "C",
     }
-    # Optional: Ignores these members when marshalling to JSON
+    # Optional: Ignores these members when marshalling
     _marshal_exclude = [
         'z',
     ]
@@ -26,9 +26,10 @@ class ControlVars:
     # _marshal_only_init_args = True
 
     # Optional: Set to False to forbid extra keys from being present in
-    # the JSON object to unmarshal from.  Defaults to True if not present.
-    # This overrides allow_extra_keys=True in unmarshal_json, and is
-    # the only way to control extra keys from within nested objects
+    # the object to unmarshal.  Defaults to True if not present.
+    # This overrides allow_extra_keys=True in unmarshal_dict (called
+    # by various unmarshal_* functions), and is the only way to
+    # control extra keys from within nested objects
 
     # _unmarshal_allow_extra_keys = False
 
