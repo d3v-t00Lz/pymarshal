@@ -15,7 +15,6 @@ __all__ = [
 ]
 
 
-
 def _get_dict(obj):
     """ Hack to work around the lack of __dict__ when __slots__ is used
 
@@ -26,6 +25,7 @@ def _get_dict(obj):
     else:
         d = obj.__dict__
     return has_slots, d
+
 
 class ExtraKeysError(Exception):
     """ Raised when extra object keys are present
@@ -93,26 +93,42 @@ def marshal_dict(
     obj,
     types,
     method=None,
+    fields=None,
     **m_kwargs
 ):
     """ Recursively marshal a Python object to a dict
         that can be passed to json.{dump,dumps}, a web client,
         or a web server, document database, etc...
 
-        Args:
-            obj:      object, It's members can be nested Python
-                      objects which will be converted to dictionaries
-            types:    tuple-of-types, The primitive types that can be
-                      serialized
-            method:   None-or-str, None to use 'marshal_dict' recursively,
-                      or a str that corresponds to the name of a class method
-                      to use.  Any nested types that are not an instance of
-                      @types must have this method defined.
-            m_kwargs: Keyword arguments to pass to @method
-        Returns:
-            dict
+    Args:
+        obj:      object, It's members can be nested Python
+                  objects which will be converted to dictionaries
+        types:    tuple-of-types, The primitive types that can be
+                  serialized
+        method:   None-or-str, None to use 'marshal_dict' recursively,
+                  or a str that corresponds to the name of a class method
+                  to use.  Any nested types that are not an instance of
+                  @types must have this method defined.
+        fields:   None-list-of-str, Explicitly marshal only these fields
+        m_kwargs: Keyword arguments to pass to @method
+    Returns:
+        dict
     """
+
     has_slots, d = _get_dict(obj)
+
+    if fields:
+        for field in fields:
+            assert field in d
+        return {
+            k: v if isinstance(v, types) else (
+                getattr(v, method)(**m_kwargs)
+                if method
+                else marshal_dict(v, types)
+            )
+            for k, v in d.items()
+            if k in fields
+        }
 
     excl = getattr(obj, '_marshal_exclude', [])
 
@@ -134,8 +150,8 @@ def marshal_dict(
     return {
         k: v if isinstance(v, types) else (
             getattr(v, method)(**m_kwargs)
-            if method else
-            marshal_dict(v, types)
+            if method
+            else marshal_dict(v, types)
         )
         for k, v in d.items()
         if k not in excl
@@ -149,17 +165,17 @@ def unmarshal_dict(
 ):
     """ Unmarshal @obj into @cls
 
-        Args:
-            obj:              dict, The dict to unmarshal into @cls
-            cls:              type, The class to unmarshal into
-            allow_extra_keys: bool, False to raise an exception when extra
-                              keys are present, True to ignore
-        Returns:
-            instance of @cls
-        Raises:
-            ExtraKeysError: If allow_extra_keys == False, and extra keys
-                            are present in @obj and not in @cls.__init__
-            ValueError:     If @cls.__init__ does not contain a self argument
+    Args:
+        obj:              dict, The dict to unmarshal into @cls
+        cls:              type, The class to unmarshal into
+        allow_extra_keys: bool, False to raise an exception when extra
+                          keys are present, True to ignore
+    Returns:
+        instance of @cls
+    Raises:
+        ExtraKeysError: If allow_extra_keys == False, and extra keys
+                        are present in @obj and not in @cls.__init__
+        ValueError:     If @cls.__init__ does not contain a self argument
     """
     args = init_args(cls)
     obj = key_swap(obj, cls, False)

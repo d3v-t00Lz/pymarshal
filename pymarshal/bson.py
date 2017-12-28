@@ -143,19 +143,25 @@ class MongoDocument:
 def marshal_bson(
     obj,
     types=BSON_TYPES,
+    fields=None,
 ):
     """ Recursively marshal a Python object to a BSON-compatible dict
         that can be passed to PyMongo, Motor, etc...
 
     Args:
-        obj:   object, It's members can be nested Python
-               objects which will be converted to dictionaries
-        types: tuple-of-types, The BSON primitive types, typically
-               you would not change this
+        obj:    object, It's members can be nested Python
+                objects which will be converted to dictionaries
+        types:  tuple-of-types, The BSON primitive types, typically
+                you would not change this
+        fields: None-list-of-str, Explicitly marshal only these fields
     Returns:
         dict
     """
-    return marshal_dict(obj, types)
+    return marshal_dict(
+        obj,
+        types,
+        fields=fields,
+    )
 
 
 def unmarshal_bson(

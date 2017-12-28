@@ -75,6 +75,16 @@ def test_marshal_json_marshal_exclude_none_keys():
     assert j == {'a': 10, 'c': None}
 
 
+def test_marshal_json_fields():
+    class DummyClass:
+        def __init__(self, a, b):
+            self.a = type_assert(a, int)
+            self.b = type_assert(b, int)
+    c = DummyClass(1, 2)
+    j = marshal_json(c, fields=['a'])
+    assert j == {'a': 1}
+
+
 def test_unmarshal_json():
     class TestClassA:
         def __init__(self, a, b):
