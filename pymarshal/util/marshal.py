@@ -162,6 +162,7 @@ def unmarshal_dict(
     obj,
     cls,
     allow_extra_keys=True,
+    ctor=None,
 ):
     """ Unmarshal @obj into @cls
 
@@ -177,7 +178,9 @@ def unmarshal_dict(
                         are present in @obj and not in @cls.__init__
         ValueError:     If @cls.__init__ does not contain a self argument
     """
-    args = init_args(cls)
+    if not ctor:
+        ctor = cls
+    args = init_args(ctor)
     obj = key_swap(obj, cls, False)
     kwargs = {k: v for k, v in obj.items() if k in args}
 
@@ -194,7 +197,7 @@ def unmarshal_dict(
         raise ExtraKeysError(cls, diff)
 
     try:
-        return cls(**kwargs)
+        return ctor(**kwargs)
     except ExtraKeysError as ex:
         raise ex
     except Exception as ex:

@@ -203,3 +203,23 @@ def test_marshal_slots():
     assert t.a == 1
     assert t.b == 2
 
+
+def test_unmarshal_ctor():
+    class A:
+        def __init__(self, a, b):
+            self.a = type_assert(a, int)
+            self.b = type_assert(b, B, ctor=B.factory)
+
+    class B:
+        def __init__(self, c, d):
+            self.c = type_assert(c, int)
+            self.d = type_assert(d, int)
+
+        @staticmethod
+        def factory(c):
+            return B(c, c+c)
+
+    d = {'a': 6, 'b': {'c': 10, 'b': 50}}
+    a = unmarshal_json(d, A)
+    assert a.b.d == 20
+

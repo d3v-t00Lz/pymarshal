@@ -168,6 +168,7 @@ def unmarshal_bson(
     obj,
     cls,
     allow_extra_keys=True,
+    ctor=None,
 ):
     """ Unmarshal @obj into @cls
 
@@ -176,6 +177,8 @@ def unmarshal_bson(
         cls:              type, The class to unmarshal into
         allow_extra_keys: bool, False to raise an exception when extra
                           keys are present, True to ignore
+        ctor:             None-or-static-method: Use this method as the
+                          constructor instead of __init__
     Returns:
         instance of @cls
     Raises:
@@ -187,4 +190,5 @@ def unmarshal_bson(
         obj,
         cls,
         allow_extra_keys,
+        ctor=ctor,
     )

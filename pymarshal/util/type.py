@@ -31,6 +31,7 @@ def _check(
     cast_from=None,
     cast_to=None,
     dynamic=None,
+    ctor=None,
 ):
     if (
         allow_none
@@ -66,7 +67,7 @@ def _check(
     if not isinstance(obj, cls):
         if isinstance(obj, dict):
             obj = key_swap(obj, cls, True)
-            return unmarshal_dict(obj, cls)
+            return unmarshal_dict(obj, cls, ctor=ctor)
         msg = _msg(obj, cls)
         raise TypeError(msg)
 
@@ -101,6 +102,7 @@ def type_assert(
     cast_to=None,
     dynamic=None,
     choices=None,
+    ctor=None,
 ):
     """ Assert that @obj is an instance of @cls
 
@@ -130,6 +132,8 @@ def type_assert(
                             [], {}, set()
             choices:    iterable-or-None, If not None, @obj must
                         be in @choices
+            ctor:       None-or-static-method: Use this method as the
+                        constructor instead of __init__
         Returns:
             @obj
         Raises:
@@ -144,6 +148,7 @@ def type_assert(
         cast_from,
         cast_to,
         dynamic=dynamic,
+        ctor=ctor,
     )
 
 
@@ -155,6 +160,7 @@ def type_assert_iter(
     dynamic=None,
     objcls=None,
     choices=None,
+    ctor=None,
 ):
     """ Checks that every object in @iterable is an instance of @cls
 
@@ -178,6 +184,8 @@ def type_assert_iter(
                         ie:  list, set, etc...
             choices:    iterable-or-None, If not None, each object in
                         @iterable must be in @choices
+            ctor:       None-or-static-method: Use this method as the
+                        constructor instead of __init__
         Returns:
             @iterable, note that @iterable will be recreated, which
             may be a performance concern if @iterable has many items
@@ -198,7 +206,14 @@ def type_assert_iter(
         iterable = dynamic
     t = type(iterable)
     return t(
-        _check(obj, cls, False, cast_from, cast_to) for obj in iterable
+        _check(
+            obj,
+            cls,
+            False,
+            cast_from,
+            cast_to,
+            ctor=ctor,
+        ) for obj in iterable
     )
 
 
@@ -211,6 +226,7 @@ def type_assert_dict(
     cast_to=None,
     dynamic=None,
     objcls=None,
+    ctor=None,
 ):
     """ Checks that every key/value in @d is an instance of @kcls: @vcls
 
@@ -236,6 +252,8 @@ def type_assert_dict(
                         ie:  dict, etc...
                         Note that isinstance considers
                         collections.OrderedDict to be of type dict
+            ctor:       None-or-static-method: Use this method as the
+                        constructor instead of __init__
         Returns:
             @d, note that @d will be recreated, which
             may be a performance concern if @d has many items
@@ -255,7 +273,14 @@ def type_assert_dict(
     return t(
         (
             _check(k, kcls) if kcls else k,
-            _check(v, vcls, allow_none, cast_from, cast_to) if vcls else v,
+            _check(
+                v,
+                vcls,
+                allow_none,
+                cast_from,
+                cast_to,
+                ctor=ctor,
+            ) if vcls else v,
         )
         for k, v in d.items()
     )
