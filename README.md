@@ -8,6 +8,9 @@ Go's implementation such as:
   - lack of mandatory fields
   - lack of default values
 
+The design of PyMarshal also encourages
+[writing unit testable code](http://misko.hevery.com/code-reviewers-guide/)
+
 Currently supported formats:
   - [JSON](https://github.com/j3ffhubb/pymarshal/tree/master/examples/usage_json.md)
   - [BSON](https://github.com/j3ffhubb/pymarshal/tree/master/examples/usage_bson.md)
