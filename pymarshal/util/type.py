@@ -161,6 +161,7 @@ def type_assert_iter(
     objcls=None,
     choices=None,
     ctor=None,
+    allow_none=False,
 ):
     """ Checks that every object in @iterable is an instance of @cls
 
@@ -186,12 +187,21 @@ def type_assert_iter(
                         @iterable must be in @choices
             ctor:       None-or-static-method: Use this method as the
                         constructor instead of __init__
+            allow_none: bool, True to allow @iterable to be None,
+                        otherwise False
         Returns:
             @iterable, note that @iterable will be recreated, which
             may be a performance concern if @iterable has many items
         Raises:
             TypeError: if @obj is not an instance of @cls
     """
+    if (
+        allow_none
+        and
+        iterable is None
+    ):
+        return iterable
+
     _check_dstruct(iterable, objcls)
 
     if choices is not None:

@@ -161,6 +161,14 @@ def test_type_assert_iter_choices():
         assert obj == type_assert_iter(obj, obj_type, choices=obj)
 
 
+def test_type_assert_iter_none():
+    assert type_assert_iter(
+        None,
+        str,
+        allow_none=True,
+    ) is None
+
+
 def test_type_assert_dict():
     for d, kcls, vcls in (
         ({5: "a", 6: "b"}, int, str),
