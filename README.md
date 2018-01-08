@@ -37,6 +37,32 @@ functions to assign `__init__` arguments to self variables of the same
 name.  pymarshal provides the `type_assert` functions to both enforce the type,
 and to unmarshal nested objects.
 
+Example (including the YAML-based docstring for API docs):
+```python
+class MyModel:
+    def __init__(
+        self,
+        a,
+        b=5,
+    ):
+        """
+        desc: >
+            An example model
+            Blah blah, blah blah
+        args:
+            -   name: a
+                type: str
+                desc: The a thing
+            -   name: b
+                type: str
+                desc: The b thing
+                required: false
+                default: 5
+        """
+        self.a = type_assert(a, str)
+        self.b = type_assert(b, int)
+```
+
 NOTE:  Your classes must not implement `__call__` (which is an antipattern
 anyway).  Whatever you would've implemented with `__call__` should just be
 a normal, named method.
