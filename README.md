@@ -8,10 +8,11 @@ Go's implementation such as:
   - lack of mandatory fields
   - lack of default values
 
-The design of PyMarshal also encourages
-[writing unit testable code](http://misko.hevery.com/code-reviewers-guide/)
+Beyond fixing the flaws of Golang's implementation:
+  - The design of PyMarshal encourages [writing unit testable code](http://misko.hevery.com/code-reviewers-guide/)
+  - [Integrated API documentation](https://github.com/j3ffhubb/pymarshal/tree/master/examples/api_docs.md)
 
-Currently supported formats:
+## Currently supported serialization formats
   - [JSON](https://github.com/j3ffhubb/pymarshal/tree/master/examples/usage_json.md)
   - [BSON](https://github.com/j3ffhubb/pymarshal/tree/master/examples/usage_bson.md)
   - [YAML](https://github.com/j3ffhubb/pymarshal/tree/master/examples/usage_yaml.md)
