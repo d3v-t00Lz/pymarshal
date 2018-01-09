@@ -61,6 +61,14 @@ class MyModel:
         """
         self.a = type_assert(a, str)
         self.b = type_assert(b, int)
+
+>>> from pymarshal.json import *
+>>> x = marshal_json(MyModel("test", 6))
+>>> x
+{"a": "test", "b": 6}
+>>> y = unmarshal_json(x, MyModel)
+>>> y.a
+"test"
 ```
 
 NOTE:  Your classes must not implement `__call__` (which is an antipattern
