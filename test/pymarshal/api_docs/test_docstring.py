@@ -13,6 +13,7 @@ class DocA:
     def __init__(
         self,
         b,
+        c=5,
     ):
         """
         desc: testing
@@ -20,6 +21,11 @@ class DocA:
             -   name: b
                 type: int
                 desc: blah
+            -   name: c
+                type: int
+                desc: blah
+                required: false
+                default: 5
         """
         self.b = b
 

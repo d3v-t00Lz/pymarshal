@@ -318,10 +318,28 @@ class DocString:
                 type: function-or-method
         raises:
             -   type: AssertionError
-                desc: When ctor does not have a docstring
+                desc: >
+                    When ctor does not have a docstring,
+                    or when @ctor's docstring does not match @ctor's
+                    method signature
         """
-        docstring = inspect.getdoc(ctor)
-        assert docstring is not None, "No docstring for {}".format(ctor)
-        obj = yaml.load(docstring)
-        return unmarshal_json(obj, DocString)
-
+        _docstring = inspect.getdoc(ctor)
+        assert _docstring is not None, "No docstring for {}".format(ctor)
+        obj = yaml.load(_docstring)
+        docstring = unmarshal_json(obj, DocString)
+        args, varargs, varkw, defaults = inspect.getargspec(ctor)
+        if args[0] == 'self':
+            args = args[1:]
+        dargs = docstring.args
+        # Validate that the argument list matches
+        for arg1, arg2 in zip(args, dargs):
+            assert arg1 == arg2.name, (arg1, arg2.name)
+        # Validate that the required arguments match
+        dreqs = dargs[:-len(defaults)] if defaults else dargs
+        for arg in dreqs:
+            assert arg.required, arg.name
+        # Validate that the default arguments match
+        ddefaults = dargs[-len(defaults):] if defaults else []
+        for arg in ddefaults:
+            assert not arg.required, arg.name
+        return docstring
