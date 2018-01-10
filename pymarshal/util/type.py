@@ -24,6 +24,12 @@ def _msg(
     )
 
 
+def _check_isinstance(obj, cls):
+        if not isinstance(obj, cls):
+            msg = _msg(obj, cls)
+            raise TypeError(msg)
+
+
 def _check(
     obj,
     cls,
@@ -45,9 +51,7 @@ def _check(
         and
         dynamic is not None
     ):
-        if not isinstance(dynamic, cls):
-            msg = _msg(dynamic, cls)
-            raise TypeError(msg)
+        _check_isinstance(dynamic, cls)
         return dynamic
 
     if (
@@ -57,9 +61,7 @@ def _check(
     ):
         if cast_to:
             cast = cast_to(obj)
-            if not isinstance(cast, cls):
-                msg = _msg(cast, cls)
-                raise TypeError(msg)
+            _check_isinstance(cast, cls)
             return cast
         else:
             return cls(obj)
@@ -67,7 +69,9 @@ def _check(
     if not isinstance(obj, cls):
         if isinstance(obj, dict):
             obj = key_swap(obj, cls, True)
-            return unmarshal_dict(obj, cls, ctor=ctor)
+            new_obj = unmarshal_dict(obj, cls, ctor=ctor)
+            _check_isinstance(new_obj, cls)
+            return new_obj
         msg = _msg(obj, cls)
         raise TypeError(msg)
 
@@ -75,13 +79,8 @@ def _check(
 
 
 def _check_dstruct(obj, cls):
-    if (
-        cls is not None
-        and
-        not isinstance(obj, cls)
-    ):
-        msg = _msg(obj, cls)
-        raise TypeError(msg)
+    if cls is not None:
+        _check_isinstance(obj, cls)
 
 
 def _check_choices(obj, choices):
