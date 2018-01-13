@@ -78,7 +78,7 @@ a normal, named method.
 Your `__init__` methods should only use simple assignment through the
 `type_assert` functions.  If you have a use-case for a constructor that
 does more than simple assignment, use a separate
-['factory' function](https://github.com/j3ffhubb/pymarshal/tree/master/examples/factory_function.md).
+['factory' static method](https://github.com/j3ffhubb/pymarshal/tree/master/examples/factory.md).
 
 There is also:
   - `type_assert_iter` for iterables

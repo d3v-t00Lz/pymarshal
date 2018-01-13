@@ -24,11 +24,9 @@ class ComplexConstructor:
         b_start=100,
         b_end=110,
     ):
-        """ Same as @complex_constructor_factory, but done as a static
-            method instead of a function.
+        """ Constructs a complex object that needs more than field assignment
 
-            Usage:
-                x = ComplexConstructor.factory(1, 2, 3, 4)
+            You could, of course, have more than one factory method
         """
         a = list(range(a_start, a_end))
         b = list(range(b_start, b_end))
@@ -44,6 +42,6 @@ class ComplexConstructor:
 {'a': [0, 1], 'b': [5, 6]}
 >>> # Typically unmarshal should not use the factory method or function,
 >>> # except in special cases where you are deliberately transforming data
->>> # from other sources that will not be sent back
+>>> # from other sources that will not be converted back to the original format
 >>> cc2 = unmarshal_json(j, ComplexConstructor)
 ```
