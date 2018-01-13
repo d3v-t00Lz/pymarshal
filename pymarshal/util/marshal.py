@@ -46,7 +46,12 @@ class ExtraKeysError(Exception):
             cls,  type, The type that was attempted to unmarshal into
             diff: dict, The extra arguments that were passed to @cls
         """
-        Exception.__init__(self)
+        msg = "\n".join([
+            "", # Newline to make the output cleaner
+            "ctor: {}".format(cls),
+            "extras: {}".format(diff)
+        ])
+        Exception.__init__(self, msg)
         self.type = str(
             type(self),
         )
@@ -73,12 +78,21 @@ class InitArgsError(Exception):
             create a circular dependency.
 
         Args:
-            cls,      type, The type that was attempted to unmarshal into
+            cls,      type-or-static-method, The type or constructor
+                      that was attempted to unmarshal into
             cls_args: list, The arguments of @cls
             kwargs:   dict, The arguments that were passed to @cls
             ex:       Exception, The exception that was raised
         """
-        Exception.__init__(self)
+        msg = "\n".join([
+            "", # Newline to make the output cleaner
+            "module: {}".format(cls.__module__),
+            "ctor: {}".format(cls),
+            "ctor_args: {}".format(cls_args),
+            "args (after removing args not in ctor_args): {}".format(kwargs),
+            "exception: {}".format(ex),
+        ])
+        Exception.__init__(self, msg)
         self.type = str(
             type(self),
         )
