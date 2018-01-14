@@ -73,6 +73,7 @@ setuptools.setup(
         'bson',
         'pytest',
         'pytest-cov',
+        'PyYAML',
     ],
     extras_require={
         'bson': ['bson']
