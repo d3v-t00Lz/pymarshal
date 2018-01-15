@@ -37,8 +37,13 @@ class Routes:
         routes,
     ):
         """
-        Args:
-            routes: dict[str]=Route, a mapping of URIs to Route instances
+        desc: Contains the URIs for this service
+        args:
+            -   name: routes
+                type: list
+                subtypes: [Route]
+                desc: a mapping of URIs to Route instances
+                ctor: pymarshal.api_docs.routes.Route.__init__
         """
         self.routes = type_assert_iter(
             routes,
@@ -57,11 +62,24 @@ class Route:
         hide=False,
     ):
         """
-        Args:
-            module:  str, The name of the module to load the handlers from
-            methods: list-of-RouteMethod, the HTTP request methods to use
-            uri:     str, The path of this route
-            hide:    bool, True to hide from the API docs, otherwise False
+        desc: Describes a URI and it's HTTP methods
+        args:
+            -   name: module
+                type: str
+                desc: The name of the module to load the handlers from
+            -   name: methods
+                type: list
+                subtypes: ["RouteMethod"]
+                desc: The HTTP request methods to use
+                ctor: pymarshal.api_docs.routes.RouteMethod.__init__
+            -   name: uri
+                type: str
+                desc: The path of this route
+            -   name: hide
+                type: bool
+                desc: True to hide from the API docs, otherwise False
+                required: false
+                default: false
         """
         self.module = type_assert(module, str)
         self.methods = type_assert_iter(
@@ -80,6 +98,9 @@ class Route:
 
 
 class RouteMethod:
+    _marshal_exclude = [
+        'method_choices',
+    ]
     def __init__(
         self,
         method,
@@ -91,13 +112,43 @@ class RouteMethod:
         method_choices=HTTP_METHODS,
     ):
         """
-        Args:
-            method:           str, The HTTP request method to use
-            description:      str, The description of what this call does
-            request_example:  dict-or-None, An example JSON request body
-            request_help:     DocString-or-None, Help for @request_example
-            response_example: dict-or-None, An example JSON response body
-            response_help:    DocString-or-None, Help for @response_example
+        desc: Describes a single HTTP method of a URI
+        args:
+            -   name: method
+                type: str
+                desc: The HTTP request method to use
+            -   name: description
+                type: str
+                desc: The description of what this call does
+                required: false
+                default: ""
+            -   name: request_example
+                type: dict
+                desc: An example JSON request body
+                required: false
+                default: null
+            -   name: request_help
+                type: DocString
+                desc: Help for @request_example
+                required: false
+                default: null
+            -   name: response_example
+                type: dict
+                desc: An example JSON response body
+                required: false
+                default: null
+            -   name: response_help
+                type: DocString
+                desc: Help for @response_example
+                required: false
+                default: null
+            -   name: method_choices
+                type: list
+                subtypes: ["str"]
+                desc: The HTTP methods to allow for @method
+                hide: true
+                required: false
+                default: [DELETE, GET, PATCH, POST, PUT]
         """
         self.method = type_assert(
             method,
@@ -137,17 +188,43 @@ class RouteMethod:
         method_choices=HTTP_METHODS,
     ):
         """
-        Args:
-            method:           str, The HTTP request method to use
-            description:      str, The description of what this call does
-            request_example:  dict-or-None, An example JSON request body
-            request_ctor:     function-or-method, The constructor of the
-                              class the request body will be unmarshalled
-                              into.
-            response_example: dict-or-None, An example JSON request body
-            response_ctor:    function-or-method, The constructor of the
-                              class the response body will be marshalled
-                              into.
+        desc: Describes a single HTTP method of a URI
+        args:
+            -   name: method
+                type: str
+                desc: The HTTP request method to use
+            -   name: description
+                type: str
+                desc: The description of what this call does
+                required: false
+                default: ""
+            -   name: request_example
+                type: dict
+                desc: An example JSON request body
+                required: false
+                default: null
+            -   name: request_ctor
+                type: method
+                desc: Docstring will be parsed into help for @request_example
+                required: false
+                default: null
+            -   name: response_example
+                type: dict-or-None
+                desc: An example JSON response body
+                required: false
+                default: null
+            -   name: response_ctor
+                type: method
+                desc: Help for @response_example
+                required: false
+                default: null
+            -   name: method_choices
+                type: list
+                subtypes: ["str"]
+                desc: The HTTP methods to allow for @method
+                hide: true
+                required: false
+                default: [DELETE, GET, PATCH, POST, PUT]
         """
         return RouteMethod(
             method,
