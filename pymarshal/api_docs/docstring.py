@@ -348,19 +348,38 @@ class DocString:
         if args[0] == 'self':
             args = args[1:]
         dargs = docstring.args
-        assert len(args) == len(dargs), "Mismatched args: \n{}\n{}".format(
-            args,
-            dargs,
+        assert len(args) == len(dargs), (
+            "{}: Mismatched arg counts: \n{}\n{}".format(
+                ctor,
+                args,
+                dargs,
+            )
         )
         # Validate that the argument list matches
         for arg1, arg2 in zip(args, dargs):
-            assert arg1 == arg2.name, arg1 + " does not match " + arg2.name
+            assert arg1 == arg2.name, (
+                "{}: {} does not match {}".format(
+                    ctor,
+                    arg1,
+                    arg2.name,
+                )
+            )
         # Validate that the required arguments match
         dreqs = dargs[:-len(defaults)] if defaults else dargs
         for arg in dreqs:
-            assert arg.required, arg.name + " should be required: true"
+            assert arg.required, (
+                "{}: {} should be required: true".format(
+                    ctor,
+                    arg.name,
+                )
+            )
         # Validate that the default arguments match
         ddefaults = dargs[-len(defaults):] if defaults else []
         for arg in ddefaults:
-            assert not arg.required, arg.name + " should be required: false"
+            assert not arg.required, (
+                "{}: {} should be required: false".format(
+                    ctor,
+                    arg.name,
+                )
+            )
         return docstring
