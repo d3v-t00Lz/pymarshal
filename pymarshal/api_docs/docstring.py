@@ -35,11 +35,11 @@ class DocStringArg:
             -   name: name
                 desc: The name of the argument
                 type: str
-            -   name: type
-                desc: The type of the argument
-                type: str
             -   name: desc
                 desc: A description of the argument
+                type: str
+            -   name: type
+                desc: The type of the argument
                 type: str
             -   name: subtypes
                 desc: >
@@ -50,6 +50,7 @@ class DocStringArg:
                     supported.
                 type: list
                 required: false
+                default: None
             -   name: required
                 desc: >
                     True if this is a mandatory argument, False if it
@@ -62,22 +63,28 @@ class DocStringArg:
                 desc: >
                     The default value for this argument.  This is ignored
                     if @required == True
+                type: any
                 required: false
+                default: None
             -   name: docstring
                 desc: >
                     A docstring instance for the constructor used by @type
+                type: pymarshal.api_docs.docstring.DocString
+                required: false
+                default: None
             -   name: hide
                 desc: >
                     Don't display this argument to the user.  Useful for
                     not showing arguments that are excluded from marshalling.
                     Note that this is only a hint to the client that will
                     render the JSON, the argument will still be sent
+                type: bool
                 required: false
                 default: false
         returns:
             desc: A DocStringArg instance with recursively populated
                   @docstring attributes for child arguments
-            type: mpwdga.util.docstring.DocStringArg
+            type: pymarshal.api_docs.docstring.DocStringArg
         """
         self.name = type_assert(name, str)
         self.desc = type_assert(desc, str)
@@ -115,11 +122,14 @@ class DocStringArg:
             Creates a DocStringArg and recursively includes child
             docstrings if they are not JSON types.
         args:
-            -   name: type
-                desc: The type of the argument
+            -   name: name
+                desc: The name of the argument
                 type: str
             -   name: desc
                 desc: A description of the argument
+                type: str
+            -   name: type
+                desc: The type of the argument
                 type: str
             -   name: subtypes
                 desc: >
@@ -130,16 +140,20 @@ class DocStringArg:
                     supported.
                 type: list
                 required: false
+                default: None
             -   name: required
                 desc: >
                     True if this is a mandatory argument, False if it
                     has a default value.  If False, @default should be
                     set appropriately.
                 type: bool
+                required: false
+                default: true
             -   name: default
                 desc: >
                     The default value for this argument.  This is ignored
                     if @required == True
+                type: any
             -   name: ctor
                 desc: >
                     Only use if @type is a class instance and not a JSON type
@@ -147,8 +161,9 @@ class DocStringArg:
                     unmarshalled to.  Either the Class.__init__, or a
                     factory function or factory static method.
                     Use the full path: module.submodule.Class.__init__
-                type: str-or-None
+                type: str
                 required: false
+                default: None
             -   name: hide
                 desc: >
                     Don't display this argument to the user.  Useful for
@@ -161,7 +176,7 @@ class DocStringArg:
         returns:
             desc: A DocStringArg instance with recursively populated
                   @docstring attributes for child arguments
-            type: mpwdga.util.docstring.DocStringArg
+            type: pymarshal.api_docs.docstring.DocStringArg
         """
         if ctor:
             type_assert(ctor, str)
@@ -272,16 +287,18 @@ class DocString:
             -   name: args
                 desc: The arguments passed to the function or method
                 type: list
-                subtypes: [mpwdga.util.docstring.DocStringArg]
+                subtypes: [pymarshal.api_docs.docstring.DocStringArg]
                 required: false
+                ctor: pymarshal.api_docs.docstring.DocStringArg.__init__
             -   name: raises
                 desc: The Exceptions that this function or method can raise
                 type: list
-                subtypes: [mpwdga.util.docstring.DocStringRaise]
+                subtypes: [pymarshal.api_docs.docstring.DocStringRaise]
                 required: false
+                ctor: pymarshal.api_docs.docstring.DocStringRaise.__init__
             -   name: returns
                 desc: The return value (if any) from the function or method
-                type: mpwdga.util.docstring.DocStringReturn
+                type: pymarshal.api_docs.docstring.DocStringReturn
                 required: false
         """
         self.desc = type_assert(desc, str)

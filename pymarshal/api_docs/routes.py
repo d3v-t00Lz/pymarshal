@@ -132,6 +132,7 @@ class RouteMethod:
                 desc: Help for @request_example
                 required: false
                 default: null
+                ctor: pymarshal.api_docs.docstring.DocString.__init__
             -   name: response_example
                 type: dict
                 desc: An example JSON response body
