@@ -90,6 +90,9 @@ class InitArgsError(Exception):
             "ctor: {}".format(cls),
             "ctor_args: {}".format(cls_args),
             "args (after removing args not in ctor_args): {}".format(kwargs),
+            "only in ctor_args".format(
+                [x for x in cls_args if x not in kwargs]
+            ),
             "exception: {}".format(ex),
         ])
         Exception.__init__(self, msg)
