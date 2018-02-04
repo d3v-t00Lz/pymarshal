@@ -32,6 +32,8 @@ def check_dups(
     Raises:
         ValueError: If @iterable contains duplicates
     """
+    if not iterable:
+        return
     unique = set(iterable)
     if len(unique) != len(iterable):
         if len(iterable) < debug_limit:
