@@ -16,6 +16,7 @@ __all__ = [
     'marshal_json',
     'Route',
     'RouteMethod',
+    'RouteMethodResponse',
     'Routes',
 ]
 
@@ -107,8 +108,7 @@ class RouteMethod:
         description="",
         request_example=None,
         request_help=None,
-        response_example=None,
-        response_help=None,
+        responses=None,
         method_choices=HTTP_METHODS,
     ):
         """
@@ -133,14 +133,13 @@ class RouteMethod:
                 required: false
                 default: null
                 ctor: pymarshal.api_docs.docstring.DocString.__init__
-            -   name: response_example
-                type: dict
-                desc: An example JSON response body
-                required: false
-                default: null
-            -   name: response_help
-                type: DocString
-                desc: Help for @response_example
+            -   name: responses
+                type: list
+                subtypes: [RouteMethodResponse]
+                desc: >
+                    Each object describes a possible response and describes
+                    the condition(s) that may cause it
+                ctor: pymarshal.api_docs.routes.RouteMethodResponse.__init__
                 required: false
                 default: null
             -   name: method_choices
@@ -167,16 +166,13 @@ class RouteMethod:
             DocString,
             allow_none=True,
         )
-        self.response_example = type_assert(
-            response_example,
-            (dict, list),
-            allow_none=True,
+        self.responses = type_assert_iter(
+            responses,
+            RouteMethodResponse,
+            dynamic=[],
         )
-        self.response_help = type_assert(
-            response_help,
-            DocString,
-            allow_none=True,
-        )
+        if responses:
+            check_dups([y for x in responses for y in x.codes])
 
     @staticmethod
     def factory(
@@ -184,8 +180,7 @@ class RouteMethod:
         description="",
         request_example=None,
         request_ctor=None,
-        response_example=None,
-        response_ctor=None,
+        responses=None,
         method_choices=HTTP_METHODS,
     ):
         """
@@ -209,16 +204,13 @@ class RouteMethod:
                 desc: Docstring will be parsed into help for @request_example
                 required: false
                 default: null
-            -   name: response_example
-                type: dict-or-None
-                desc: An example JSON response body
-                required: false
-                default: null
-            -   name: response_ctor
-                type: method
-                desc: Help for @response_example
-                required: false
-                default: null
+            -   name: responses
+                type: list
+                subtypes: [RouteMethodResponse]
+                desc: >
+                    Each object describes a possible response and describes
+                    the condition(s) that may cause it
+                ctor: pymarshal.api_docs.routes.RouteMethodResponse.__init__
             -   name: method_choices
                 type: list
                 subtypes: ["str"]
@@ -232,8 +224,7 @@ class RouteMethod:
             description,
             request_example,
             DocString.from_ctor(request_ctor) if request_ctor else None,
-            response_example,
-            DocString.from_ctor(response_ctor) if response_ctor else None,
+            responses,
             method_choices,
         )
 
@@ -242,3 +233,92 @@ class RouteMethod:
 
     def __eq__(self, other):
         return self.method == other.method
+
+
+class RouteMethodResponse:
+    def __init__(
+        self,
+        description,
+        codes=[200],
+        response_example=None,
+        response_help=None,
+    ):
+        """
+        desc: Describes a response to an API call
+        args:
+            -   name: description
+                type: str
+                desc: A description of the condition that causes this response
+            -   name: codes
+                type: int
+                desc: >
+                    One or more HTTP status codes associated with
+                    this response
+                required: false
+                default: [200]
+            -   name: response_example
+                type: dict
+                desc: An example JSON response body
+                required: false
+                default: null
+            -   name: response_help
+                type: method
+                desc: Help for @response_example
+                required: false
+                default: null
+        """
+        self.description = type_assert(
+            description,
+            str,
+        )
+        self.codes = type_assert_iter(codes, int)
+        self.response_example = type_assert(
+            response_example,
+            (dict, list),
+            allow_none=True,
+        )
+        self.response_help = type_assert(
+            response_help,
+            DocString,
+            allow_none=True,
+        )
+
+    @staticmethod
+    def factory(
+        description="",
+        codes=[200],
+        response_example=None,
+        response_ctor=None,
+    ):
+        """
+        desc: Describes a response to an API call
+        args:
+            -   name: description
+                type: str
+                desc: A description of the condition that causes this response
+                required: false
+                default: ""
+            -   name: codes
+                type: int
+                desc: >
+                    One or more HTTP status codes associated with
+                    this response
+                required: false
+                default: [200]
+            -   name: response_example
+                type: dict
+                desc: An example JSON response body
+                required: false
+                default: null
+            -   name: response_help
+                type: DocString
+                desc: Help for @response_example
+                required: false
+                default: null
+        """
+        return RouteMethodResponse(
+            description,
+            codes,
+            response_example,
+            DocString.from_ctor(response_ctor) if response_ctor else None,
+        )

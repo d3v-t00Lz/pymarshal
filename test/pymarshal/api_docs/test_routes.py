@@ -33,3 +33,28 @@ def test_route_method_eq():
 
 def test_route_method_hash():
     hash(RouteMethod('GET'))
+
+
+def test_route_method_response_dups():
+    with pytest.raises(ValueError):
+        Routes(
+            routes=[
+                Route(
+                    module='',
+                    methods=[
+                        RouteMethod.factory(
+                            'GET',
+                            responses=[
+                                RouteMethodResponse.factory(
+                                    'blah',
+                                ),
+                                RouteMethodResponse.factory(
+                                    'blahblah',
+                                ),
+                            ],
+                        ),
+                    ],
+                    uri='/api/v1/testing',
+                ),
+            ]
+        )
