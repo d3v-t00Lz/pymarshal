@@ -2,9 +2,14 @@
 
 """
 
-import inspect
 import sys
 import types
+
+
+if sys.version_info >= (3,):  # pragma: no cover
+    from inspect import getfullargspec as getargspec
+else:  # pragma: no cover
+    from inspect import getargspec
 
 
 def init_args(cls):
@@ -20,12 +25,11 @@ def init_args(cls):
     # accomplish this task do not apply here.
     try:
         # Assume it's a factory function, static method, or other callable
-        argspec = inspect.getargspec(cls)
-        args = argspec.args
+        argspec = getargspec(cls)
     except TypeError:
         # assume it's a class
-        argspec = inspect.getargspec(cls.__init__)
-        args = argspec.args
+        argspec = getargspec(cls.__init__)
+    args = argspec.args
 
     # Note:  There is a special place in hell for people who don't
     #        call the first method argument 'self'.

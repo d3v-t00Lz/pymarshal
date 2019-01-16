@@ -6,7 +6,10 @@ import importlib
 import inspect
 import yaml
 
-from pymarshal.util.init_args import init_args
+from pymarshal.util.init_args import (
+    getargspec,
+    init_args,
+)
 from pymarshal.json import *
 
 
@@ -344,7 +347,12 @@ class DocString:
         assert _docstring is not None, "No docstring for {}".format(ctor)
         obj = yaml.load(_docstring)
         docstring = unmarshal_json(obj, DocString)
-        args, varargs, varkw, defaults = inspect.getargspec(ctor)
+        argspec = getargspec(ctor)
+        args, varargs, defaults = (
+            argspec.args,
+            argspec.varargs,
+            argspec.defaults,
+        )
         if args[0] == 'self':
             args = args[1:]
         dargs = docstring.args
