@@ -345,7 +345,7 @@ class DocString:
         """
         _docstring = inspect.getdoc(ctor)
         assert _docstring is not None, "No docstring for {}".format(ctor)
-        obj = yaml.load(_docstring)
+        obj = yaml.safe_load(_docstring)
         docstring = unmarshal_json(obj, DocString)
         argspec = getargspec(ctor)
         args, varargs, defaults = (

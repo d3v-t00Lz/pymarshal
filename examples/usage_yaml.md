@@ -20,6 +20,6 @@ class Y:
 a: 1
 b: [2, 3, 4]
 >>> # Create a new Y instance from yml_str
->>> yml_obj = yaml.load(yml_str)
+>>> yml_obj = yaml.safe_load(yml_str)
 >>> y2 = unmarshal_json(yml_obj, Y)
 ```
