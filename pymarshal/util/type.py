@@ -102,6 +102,7 @@ def type_assert(
     dynamic=None,
     choices=None,
     ctor=None,
+    desc=None,
 ):
     """ Assert that @obj is an instance of @cls
 
@@ -131,8 +132,10 @@ def type_assert(
                             [], {}, set()
             choices:    iterable-or-None, If not None, @obj must
                         be in @choices
-            ctor:       None-or-static-method: Use this method as the
+            ctor:       None-or-static-method, Use this method as the
                         constructor instead of __init__
+            desc:       None-or-string, an optional description for this field,
+                        for using this function to fully replace docstrings
         Returns:
             @obj
         Raises:
@@ -161,6 +164,7 @@ def type_assert_iter(
     choices=None,
     ctor=None,
     allow_none=False,
+    desc=None,
 ):
     """ Checks that every object in @iterable is an instance of @cls
 
@@ -188,6 +192,8 @@ def type_assert_iter(
                         constructor instead of __init__
             allow_none: bool, True to allow @iterable to be None,
                         otherwise False
+            desc:       None-or-string, an optional description for this field,
+                        for using this function to fully replace docstrings
         Returns:
             @iterable, note that @iterable will be recreated, which
             may be a performance concern if @iterable has many items
@@ -236,6 +242,7 @@ def type_assert_dict(
     dynamic=None,
     objcls=None,
     ctor=None,
+    desc=None,
 ):
     """ Checks that every key/value in @d is an instance of @kcls: @vcls
 
@@ -263,6 +270,8 @@ def type_assert_dict(
                         collections.OrderedDict to be of type dict
             ctor:       None-or-static-method: Use this method as the
                         constructor instead of __init__
+            desc:       None-or-string, an optional description for this field,
+                        for using this function to fully replace docstrings
         Returns:
             @d, note that @d will be recreated, which
             may be a performance concern if @d has many items
