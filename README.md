@@ -16,6 +16,7 @@ Beyond fixing the flaws of Golang's implementation:
   - [JSON](https://github.com/j3ffhubb/pymarshal/tree/master/examples/usage_json.md)
   - [BSON](https://github.com/j3ffhubb/pymarshal/tree/master/examples/usage_bson.md)
   - [YAML](https://github.com/j3ffhubb/pymarshal/tree/master/examples/usage_yaml.md)
+  - [CSV](https://github.com/j3ffhubb/pymarshal/tree/master/examples/usage_csv.md)
 
 As YAML is compatible with JSON, use PyYAML to load or dump data
 with the `pymarshal.json` module, there is no explicit YAML module.

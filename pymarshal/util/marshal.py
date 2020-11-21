@@ -12,6 +12,8 @@ __all__ = [
     'InitArgsError',
     'marshal_dict',
     'unmarshal_dict',
+    'marshal_list',
+    'unmarshal_list',
 ]
 
 
@@ -131,7 +133,6 @@ def marshal_dict(
     Returns:
         dict
     """
-
     has_slots, d = _get_dict(obj)
 
     if fields:
@@ -188,6 +189,8 @@ def unmarshal_dict(
         cls:              type, The class to unmarshal into
         allow_extra_keys: bool, False to raise an exception when extra
                           keys are present, True to ignore
+        ctor:             None-or-method:  Use this as a constructor instead
+                          of __init__
     Returns:
         instance of @cls
     Raises:
@@ -225,3 +228,62 @@ def unmarshal_dict(
             ex,
         )
 
+
+def marshal_list(
+    obj,
+    cls,
+    types,
+    fields=None
+):
+    """ Marshal @obj into a list
+    Args:
+        obj:   object, the object to marshal into a list
+        cls:   function-or-method, Use this as a constructor instead
+               of __init__
+        types: iterable, a collection of valid types
+    Returns:
+        list
+    Raises:
+        ValueError: If the class fields contain invalid types
+    """
+    if isinstance(cls, type):
+        cls = cls.__init__
+    if not fields:
+        fields = cls.__code__.co_varnames
+        if fields[0] == 'self':
+            fields = fields[1:]
+    result = [
+        getattr(obj, arg)
+        for arg in fields
+    ]
+    invalid = [
+        x for x in result
+        if type(x) not in types
+    ]
+    if invalid:
+        raise ValueError("Invalid fields: {}".format(invalid))
+    return result
+
+def unmarshal_list(
+    _list,
+    cls,
+):
+    """ Unmarshal @_list into @cls
+
+    Args:
+        _list: list-or-tuple, The list to unmarshal into @cls
+        cls:   type-or-function, The class to unmarshal into
+    Returns:
+        List of instances of @cls
+    Raises:
+        InitArgsError: If instantiation fails
+    """
+    try:
+        return cls(*_list)
+    except Exception as ex:
+        raise InitArgsError(
+            cls,
+            _list,
+            {},
+            ex,
+        )

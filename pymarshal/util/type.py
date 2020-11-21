@@ -60,7 +60,7 @@ def _check(
         isinstance(obj, cast_from)
     ):
         if cast_to:
-            cast = cast_to(obj)
+            cast = cast_to(obj) if cast_to else cls(obj)
             _check_isinstance(cast, cls)
             return cast
         else:
