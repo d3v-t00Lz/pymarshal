@@ -63,6 +63,7 @@ setuptools.setup(
     license='BSD',
     description=DESCRIPTION,
     long_description=open('README.md', 'rt').read(),
+    long_description_content_type='text/markdown',
     url=URL,
     packages=setuptools.find_packages(
         exclude=["*.test", "*.test.*", "test.*", "test"],
