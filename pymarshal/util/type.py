@@ -25,9 +25,9 @@ def _msg(
 
 
 def _check_isinstance(obj, cls):
-        if not isinstance(obj, cls):
-            msg = _msg(obj, cls)
-            raise TypeError(msg)
+    if not isinstance(obj, cls):
+        msg = _msg(obj, cls)
+        raise TypeError(msg)
 
 
 def _check(
