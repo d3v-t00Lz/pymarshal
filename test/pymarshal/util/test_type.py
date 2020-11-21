@@ -7,6 +7,7 @@ import pytest
 
 from pymarshal.util.type import *
 from pymarshal.util.type import (
+    _check,
     _check_choices,
     _check_dstruct,
 )
@@ -197,3 +198,12 @@ def test_type_assert_dict_dynamic():
     ):
         # should not raise or change the value
         assert dynamic == type_assert_dict(None, kcls, vcls, dynamic=dynamic)
+
+def test__check_false_to_none():
+    for val, t in (
+        (0, int),
+        ("", str),
+        ([], list),
+        ({}, dict),
+    ):
+        assert _check(val, t, false_to_none=True) is None

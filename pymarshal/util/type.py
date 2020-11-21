@@ -38,6 +38,7 @@ def _check(
     cast_to=None,
     dynamic=None,
     ctor=None,
+    false_to_none=False,
 ):
     if (
         allow_none
@@ -45,6 +46,13 @@ def _check(
         obj is None
     ):
         return obj
+
+    if (
+        false_to_none
+        and
+        not obj
+    ):
+        return None
 
     if (
         obj is None
@@ -103,6 +111,7 @@ def type_assert(
     choices=None,
     ctor=None,
     desc=None,
+    false_to_none=False,
 ):
     """ Assert that @obj is an instance of @cls
 
@@ -136,6 +145,8 @@ def type_assert(
                         constructor instead of __init__
             desc:       None-or-string, an optional description for this field,
                         for using this function to fully replace docstrings
+            false_to_none: bool, True to cast falsey values such as "", 0, [],
+                        to None
         Returns:
             @obj
         Raises:
@@ -151,6 +162,7 @@ def type_assert(
         cast_to,
         dynamic=dynamic,
         ctor=ctor,
+        false_to_none=false_to_none,
     )
 
 
@@ -165,6 +177,7 @@ def type_assert_iter(
     ctor=None,
     allow_none=False,
     desc=None,
+    false_to_none=False,
 ):
     """ Checks that every object in @iterable is an instance of @cls
 
@@ -194,6 +207,8 @@ def type_assert_iter(
                         otherwise False
             desc:       None-or-string, an optional description for this field,
                         for using this function to fully replace docstrings
+            false_to_none: bool, True to cast falsey values such as "", 0, [],
+                        to None
         Returns:
             @iterable, note that @iterable will be recreated, which
             may be a performance concern if @iterable has many items
@@ -228,6 +243,7 @@ def type_assert_iter(
             cast_from,
             cast_to,
             ctor=ctor,
+            false_to_none=false_to_none,
         ) for obj in iterable
     )
 
@@ -243,6 +259,7 @@ def type_assert_dict(
     objcls=None,
     ctor=None,
     desc=None,
+    false_to_none=False,
 ):
     """ Checks that every key/value in @d is an instance of @kcls: @vcls
 
@@ -272,6 +289,8 @@ def type_assert_dict(
                         constructor instead of __init__
             desc:       None-or-string, an optional description for this field,
                         for using this function to fully replace docstrings
+            false_to_none: bool, True to cast falsey values such as "", 0, [],
+                        to None
         Returns:
             @d, note that @d will be recreated, which
             may be a performance concern if @d has many items
@@ -298,6 +317,7 @@ def type_assert_dict(
                 cast_from,
                 cast_to,
                 ctor=ctor,
+                false_to_none=false_to_none,
             ) if vcls else v,
         )
         for k, v in d.items()
