@@ -9,7 +9,7 @@ def test_init_args():
         def __init__(self, a, b):
             pass
 
-    expected = ['a', 'b']
+    expected = ('a', 'b')
     assert init_args(C) == expected  # class
     assert init_args(C(1, 2)) == expected  # instance
 
@@ -18,7 +18,7 @@ def test_init_args_factory_function():
     def factory(a, b):
         pass
 
-    expected = ['a', 'b']
+    expected = ('a', 'b')
     assert init_args(factory) == expected
 
 
@@ -31,5 +31,5 @@ def test_init_args_factory_method():
         def factory(a, b):
             pass
 
-    expected = ['a', 'b']
+    expected = ('a', 'b')
     assert init_args(A.factory) == expected

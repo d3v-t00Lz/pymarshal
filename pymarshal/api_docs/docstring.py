@@ -4,10 +4,15 @@
 
 import importlib
 import inspect
+import sys
 import yaml
 
+if sys.version_info >= (3,):  # pragma: no cover
+    from inspect import getfullargspec as getargspec
+else:  # pragma: no cover
+    from inspect import getargspec
+
 from pymarshal.util.init_args import (
-    getargspec,
     init_args,
 )
 from pymarshal.json import *
