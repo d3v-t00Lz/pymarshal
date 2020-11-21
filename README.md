@@ -8,9 +8,9 @@ Go's implementation such as:
   - lack of mandatory fields
   - lack of default values
 
-Beyond fixing the flaws of Golang's implementation:
-  - The design of PyMarshal encourages [writing unit testable code](http://misko.hevery.com/code-reviewers-guide/)
-  - [Integrated API documentation](https://github.com/j3ffhubb/pymarshal/tree/master/examples/api_docs.md)
+## v2.0.0
+Support for the YAML API doc format has been dropped.  If you need this, use
+1.6.2
 
 ## Currently supported serialization formats
   - [JSON](https://github.com/j3ffhubb/pymarshal/tree/master/examples/usage_json.md)
@@ -38,7 +38,7 @@ functions to assign `__init__` arguments to self variables of the same
 name.  pymarshal provides the `type_assert` functions to both enforce the type,
 and to unmarshal nested objects.
 
-Example (including the YAML-based docstring for API docs):
+Example:
 ```python
 class MyModel:
     def __init__(
@@ -46,20 +46,6 @@ class MyModel:
         a,
         b=5,
     ):
-        """
-        desc: >
-            An example model
-            Blah blah, blah blah
-        args:
-            -   name: a
-                type: str
-                desc: The a thing
-            -   name: b
-                type: str
-                desc: The b thing
-                required: false
-                default: 5
-        """
         self.a = type_assert(a, str)
         self.b = type_assert(b, int)
 

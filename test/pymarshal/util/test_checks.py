@@ -13,6 +13,9 @@ def test_check_dups():
     # should not raise
     check_dups([1, 2, 3])
 
+def test_check_dups_empty():
+    # should not raise
+    check_dups([])
 
 def test_check_dups_raises():
     for iterable, debug_limit in (
