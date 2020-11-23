@@ -207,3 +207,20 @@ def test__check_false_to_none():
         ({}, dict),
     ):
         assert _check(val, t, false_to_none=True) is None
+
+def test__check_check_fails():
+    for val, t, check in (
+        (
+            -12,
+            int,
+            lambda x: x in range(0, 128),
+        ),
+        (
+            "test",
+            str,
+            lambda x: "lol" in x,
+        ),
+    ):
+        with pytest.raises(ValueError):
+            _check(val, t, check=check)
+

@@ -39,6 +39,7 @@ def _check(
     dynamic=None,
     ctor=None,
     false_to_none=False,
+    check=None,
 ):
     if (
         allow_none
@@ -60,7 +61,7 @@ def _check(
         dynamic is not None
     ):
         _check_isinstance(dynamic, cls)
-        return dynamic
+        obj = dynamic
 
     if (
         cast_from
@@ -70,18 +71,27 @@ def _check(
         if cast_to:
             cast = cast_to(obj) if cast_to else cls(obj)
             _check_isinstance(cast, cls)
-            return cast
+            obj = cast
         else:
-            return cls(obj)
+            obj = cls(obj)
+
+    if (
+        check
+        and
+        not check(obj)
+    ):
+        msg = "'{}' failed check '{}'".format(obj, check)
+        raise ValueError(msg)
 
     if not isinstance(obj, cls):
         if isinstance(obj, dict):
             obj = key_swap(obj, cls, True)
             new_obj = unmarshal_dict(obj, cls, ctor=ctor)
             _check_isinstance(new_obj, cls)
-            return new_obj
-        msg = _msg(obj, cls)
-        raise TypeError(msg)
+            obj = new_obj
+        else:
+            msg = _msg(obj, cls)
+            raise TypeError(msg)
 
     return obj
 
@@ -112,6 +122,7 @@ def type_assert(
     ctor=None,
     desc=None,
     false_to_none=False,
+    check=None,
 ):
     """ Assert that @obj is an instance of @cls
 
@@ -147,10 +158,14 @@ def type_assert(
                         for using this function to fully replace docstrings
             false_to_none: bool, True to cast falsey values such as "", 0, [],
                         to None
+            check:      None-lambda-function, Single argument function to check
+                        a value, return False if not valid, for example:
+                            lambda x: x >= 0 and x < 256
         Returns:
             @obj
         Raises:
-            TypeError: if @obj is not an instance of @cls
+            TypeError:  If @obj is not an instance of @cls
+            ValueError: If @check is not None and @obj fails @check
     """
     _check_choices(obj, choices)
 
@@ -163,6 +178,7 @@ def type_assert(
         dynamic=dynamic,
         ctor=ctor,
         false_to_none=false_to_none,
+        check=check,
     )
 
 
@@ -178,6 +194,7 @@ def type_assert_iter(
     allow_none=False,
     desc=None,
     false_to_none=False,
+    check=None,
 ):
     """ Checks that every object in @iterable is an instance of @cls
 
@@ -209,11 +226,15 @@ def type_assert_iter(
                         for using this function to fully replace docstrings
             false_to_none: bool, True to cast falsey values such as "", 0, [],
                         to None
+            check:      None-lambda-function, Single argument function to check
+                        a value, return False if not valid, for example:
+                            lambda x: x >= 0 and x < 256
         Returns:
             @iterable, note that @iterable will be recreated, which
             may be a performance concern if @iterable has many items
         Raises:
-            TypeError: if @obj is not an instance of @cls
+            TypeError:  If @obj is not an instance of @cls
+            ValueError: If @check is not None and a value fails @check
     """
     if (
         allow_none
@@ -244,6 +265,7 @@ def type_assert_iter(
             cast_to,
             ctor=ctor,
             false_to_none=false_to_none,
+            check=check,
         ) for obj in iterable
     )
 
@@ -260,6 +282,7 @@ def type_assert_dict(
     ctor=None,
     desc=None,
     false_to_none=False,
+    check=None,
 ):
     """ Checks that every key/value in @d is an instance of @kcls: @vcls
 
@@ -291,12 +314,16 @@ def type_assert_dict(
                         for using this function to fully replace docstrings
             false_to_none: bool, True to cast falsey values such as "", 0, [],
                         to None
+            check:      None-lambda-function, Single argument function to check
+                        a value, return False if not valid, for example:
+                            lambda x: x >= 0 and x < 256
         Returns:
             @d, note that @d will be recreated, which
             may be a performance concern if @d has many items
         Raises:
-            TypeError: if a key is not an instance of @kcls or
-                       a value is not an instance of @vcls
+            TypeError:  If a key is not an instance of @kcls or
+                        a value is not an instance of @vcls
+            ValueError: If @check is not None and a value fails @check
     """
     _check_dstruct(d, objcls)
 
@@ -318,6 +345,7 @@ def type_assert_dict(
                 cast_to,
                 ctor=ctor,
                 false_to_none=false_to_none,
+                check=check,
             ) if vcls else v,
         )
         for k, v in d.items()
