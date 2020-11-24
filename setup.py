@@ -58,7 +58,7 @@ class PyTest(TestCommand):
 setuptools.setup(
     name=NAME,
     version=VERSION,
-    author="Jeff Hubbard",
+    author="Pymarshal Team",
     author_email='j3ffhubb@users.noreply.github.com',
     license='BSD',
     description=DESCRIPTION,

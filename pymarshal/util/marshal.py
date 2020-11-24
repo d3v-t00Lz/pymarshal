@@ -21,6 +21,8 @@ def _get_dict(obj):
     """ Hack to work around the lack of __dict__ when __slots__ is used
 
     """
+    if isinstance(obj, dict):
+        return False, obj
     has_slots = hasattr(obj, '__slots__')
     if has_slots:
         d = {k:getattr(obj, k) for k in obj.__slots__}
@@ -107,6 +109,32 @@ class InitArgsError(Exception):
         self.ex = str(ex)
         self.type = self.__class__.__name__
 
+def _marshal_value(
+    k,
+    v,
+    types,
+    method,
+    **m_kwargs
+):
+    if isinstance(v, dict):
+        return marshal_dict(v, types)
+    elif isinstance(v, list):
+        return _marshal_list(v, types)
+    elif isinstance(v, types):
+        return v
+    elif method:
+        return getattr(v, method)(**m_kwargs)
+    else:
+        return marshal_dict(v, types)
+
+def _marshal_list(
+    _list,
+    types,
+):
+    return [
+        marshal_dict(x, types)
+        for x in _list
+    ]
 
 def marshal_dict(
     obj,
@@ -133,17 +161,14 @@ def marshal_dict(
     Returns:
         dict
     """
+    result = {}
     has_slots, d = _get_dict(obj)
 
     if fields:
         for field in fields:
             assert field in d
         return {
-            k: v if isinstance(v, types) else (
-                getattr(v, method)(**m_kwargs)
-                if method
-                else marshal_dict(v, types)
-            )
+            k: _marshal_value(k, v, types, method, **m_kwargs)
             for k, v in d.items()
             if k in fields
         }
@@ -166,15 +191,10 @@ def marshal_dict(
             excl.extend(x for x in none_keys if d.get(x) is None)
 
     return {
-        k: v if isinstance(v, types) else (
-            getattr(v, method)(**m_kwargs)
-            if method
-            else marshal_dict(v, types)
-        )
+        k: _marshal_value(k, v, types, method, **m_kwargs)
         for k, v in d.items()
         if k not in excl
     }
-
 
 def unmarshal_dict(
     obj,

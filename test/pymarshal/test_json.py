@@ -223,3 +223,47 @@ def test_unmarshal_ctor():
     a = unmarshal_json(d, A)
     assert a.b.d == 20
 
+def test_marshal_json_list():
+    class A:
+        def __init__(self, a, b):
+            self.a = type_assert(a, str)
+            self.b = type_assert(b, int)
+
+    class B:
+        def __init__(self, a):
+            self.a = type_assert_iter(a, A)
+
+    obj = B([
+        A("a", 1),
+        A("b", 2),
+    ])
+    j = marshal_json(obj)
+    assert j == {
+        'a': [
+            {'a': 'a', 'b': 1},
+            {'a': 'b', 'b': 2}
+        ]
+    }
+
+def test_marshal_json_dict():
+    class A:
+        def __init__(self, a, b):
+            self.a = type_assert(a, str)
+            self.b = type_assert(b, int)
+
+    class B:
+        def __init__(self, a):
+            self.a = type_assert_dict(a, vcls=A)
+
+    obj = B({
+        'a': A("a", 1),
+        'b': A("b", 2),
+    })
+    j = marshal_json(obj)
+    assert j == {
+        'a': {
+            'a': {'a': 'a', 'b': 1},
+            'b': {'a': 'b', 'b': 2}
+        }
+    }
+
