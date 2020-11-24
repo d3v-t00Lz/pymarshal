@@ -4,6 +4,7 @@
 
 from .marshal import unmarshal_dict
 from .key_swap import key_swap
+import inspect
 
 
 __all__ = [
@@ -80,7 +81,13 @@ def _check(
         and
         not check(obj)
     ):
-        msg = "'{}' failed check '{}'".format(obj, check)
+        try:
+            source = inspect.getsource(check)
+        except OSError:
+            # When running in the Python terminal, getting the source code
+            # will fail.  So just give the function and address.
+            source = check
+        msg = "'{}' failed check '{}'".format(obj, source)
         raise ValueError(msg)
 
     if not isinstance(obj, cls):

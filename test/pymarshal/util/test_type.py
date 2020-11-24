@@ -224,3 +224,18 @@ def test__check_check_fails():
         with pytest.raises(ValueError):
             _check(val, t, check=check)
 
+def test__check_from_terminal():
+    """ Simulates the OSError from inspect.getsource when run from the
+        Python terminal
+    """
+    def _getsource(*args):
+        raise OSError
+    import inspect
+    getsource = inspect.getsource
+    inspect.getsource = _getsource
+    try:
+        with pytest.raises(ValueError):
+            _check({}, dict, check=lambda x: False)
+    finally:
+        inspect.getsource = getsource
+
