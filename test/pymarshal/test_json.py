@@ -267,3 +267,11 @@ def test_marshal_json_dict():
         }
     }
 
+def test_marshal_list_of_ints():
+    class A:
+        def __init__(self, a):
+            self.a = a
+    obj = A([1, 2, 3])
+    j = marshal_json(obj)
+    assert j == {'a': [1, 2, 3]}, j
+

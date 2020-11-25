@@ -132,7 +132,8 @@ def _marshal_list(
     types,
 ):
     return [
-        marshal_dict(x, types)
+        x if isinstance(x, (bool, float, int, str, type(None)))
+        else marshal_dict(x, types)
         for x in _list
     ]
 
