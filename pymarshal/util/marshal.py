@@ -252,25 +252,22 @@ def unmarshal_dict(
 
 def marshal_list(
     obj,
-    cls,
     types,
-    fields=None
+    fields=None,
+    ctor=None,
 ):
     """ Marshal @obj into a list
     Args:
         obj:   object, the object to marshal into a list
-        cls:   function-or-method, Use this as a constructor instead
-               of __init__
         types: iterable, a collection of valid types
     Returns:
         list
     Raises:
         ValueError: If the class fields contain invalid types
     """
-    if isinstance(cls, type):
-        cls = cls.__init__
     if not fields:
-        fields = cls.__code__.co_varnames
+        fields = obj.__init__.__code__.co_varnames
+        # Calling the self arg something other than self is not supported
         if fields[0] == 'self':
             fields = fields[1:]
     result = [

@@ -22,7 +22,6 @@ CSV_TYPES = (
 
 def marshal_csv(
     iterable,
-    cls,
     types=CSV_TYPES,
     fields=None,
 ):
@@ -32,7 +31,6 @@ def marshal_csv(
     Args:
         iterable: list, A list of objects that do not contain nested objects,
                   all fields must be of types in @types
-        cls:      type-or-function,
         types:    tuple-of-types, The primitive types, typically
                   you would not change this
         fields:   None-or-list-of-str, Explicitly marshal only these fields
@@ -42,7 +40,6 @@ def marshal_csv(
     return [
         marshal_list(
             x,
-            cls,
             types,
             fields,
         ) for x in iterable

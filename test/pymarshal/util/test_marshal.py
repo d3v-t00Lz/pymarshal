@@ -9,7 +9,7 @@ def test_marshal_list_invalid_fields():
 
     t = Test("123")
     with pytest.raises(ValueError):
-        m = marshal_list(t, Test, types=(int,))
+        m = marshal_list(t, types=(int,))
 
 def test_unmarshal_list_invalid_fields():
     class Test:
