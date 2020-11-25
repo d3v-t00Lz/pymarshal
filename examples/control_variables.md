@@ -46,6 +46,12 @@ class ControlVars:
 
     # _marshal_exclude_none_keys = ['key1', 'key2']
 
+    # Using this when marshalling to CSV or other list types will
+    # make this value the first column on every row.  Use this
+    # when you are using multiple types as rows in a single CSV
+    # document
+    _marshal_list_row_header = "row_header"
+
     def __init__(self, c, z="test", none=None):
         self.c = type_assert(c, float)
         # this will be ignored when marshalling because

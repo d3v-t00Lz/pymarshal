@@ -274,6 +274,17 @@ def marshal_list(
         getattr(obj, arg)
         for arg in fields
     ]
+
+    if (
+        hasattr(obj, '_marshal_list_row_header')
+        and
+        isinstance(
+            obj._marshal_list_row_header,
+            types,
+        )
+    ):
+        result.insert(0, obj._marshal_list_row_header)
+
     invalid = [
         x for x in result
         if type(x) not in types
