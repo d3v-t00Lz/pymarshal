@@ -3,12 +3,14 @@
 """
 
 from .util.marshal import *
+from .util.pm_assert import pm_assert
 from .util.type import *
 
 
 __all__ = [
     'InitArgsError',
     'marshal_csv',
+    'pm_assert',
     'type_assert',
     'type_assert_iter',
     'unmarshal_csv',

@@ -3,6 +3,7 @@
 """
 
 from .util.marshal import *
+from .util.pm_assert import pm_assert
 from .util.type import *
 
 
@@ -10,6 +11,7 @@ __all__ = [
     'ExtraKeysError',
     'InitArgsError',
     'marshal_json',
+    'pm_assert',
     'type_assert',
     'type_assert_dict',
     'type_assert_iter',
