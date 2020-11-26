@@ -23,6 +23,7 @@ JSON_TYPES = (
     int,
     list,
     str,
+    tuple,
     type(None),
 )
 

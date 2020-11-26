@@ -18,9 +18,13 @@ def test_marshal_json():
     obj.d = 20  # should not be in output
     obj.a.b = 5
     obj.a.d = 50  # should not be in output
+    obj.e = (1, 2, 3)
 
     j = marshal_json(obj)
-    assert j == {'a': {'b': 5}}
+    assert j == {
+        'a': {'b': 5},
+        'e': (1, 2, 3),
+    }, j
 
 
 def test_marshal_json_marshal_only_init_args_true():

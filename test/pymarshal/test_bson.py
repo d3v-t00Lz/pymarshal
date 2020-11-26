@@ -11,22 +11,27 @@ from pymarshal.bson import *
 
 
 def test_marshal_bson():
-    class DummyClass:
+    class Class:
         _marshal_exclude = ['d']
         def __init__(self):
             pass
 
     _id = bson.ObjectId()
 
-    obj = DummyClass()
+    obj = Class()
     obj._id = _id
-    obj.a = DummyClass()
+    obj.a = Class()
     obj.d = 20  # should not be in output
     obj.a.b = 5
     obj.a.d = 50  # should not be in output
+    obj.e = (1, 2, 3)
 
     j = marshal_bson(obj)
-    assert j == {'_id': _id, 'a': {'b': 5}}
+    assert j == {
+        '_id': _id,
+        'a': {'b': 5},
+        'e': (1, 2, 3),
+    }, j
 
 
 def test_unmarshal_bson():

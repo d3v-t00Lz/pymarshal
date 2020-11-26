@@ -35,6 +35,7 @@ BSON_TYPES = (
     float,
     int,
     list,
+    tuple,
     str,
     type(None),
 )
