@@ -56,7 +56,9 @@ def unmarshal_csv(
 
     Args:
         iterable: list-or-tuple-of-objects
-        cls:      type-or-function, The type to unmarshal into
+        cls:
+            type-or-function or {"row header": function},
+            The type to unmarshal into
     Returns:
         List of instances of @cls
     Raises:
@@ -66,3 +68,4 @@ def unmarshal_csv(
         unmarshal_list(x, cls)
         for x in iterable
     ]
+

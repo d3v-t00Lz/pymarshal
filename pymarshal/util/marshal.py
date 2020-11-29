@@ -254,7 +254,6 @@ def marshal_list(
     obj,
     types,
     fields=None,
-    ctor=None,
 ):
     """ Marshal @obj into a list
     Args:
@@ -297,16 +296,24 @@ def unmarshal_list(
     _list,
     cls,
 ):
-    """ Unmarshal @_list into @cls
+    """ Unmarshal @_list into @cls.
+        @_list must be ordered correctly for the positional arguments of @cls
 
     Args:
-        _list: list-or-tuple, The list to unmarshal into @cls
-        cls:   type-or-function, The class to unmarshal into
+        _list:
+            list-or-tuple, The list to unmarshal into @cls
+        cls:
+            type-or-function-or-dict-of-str:function,
+            The class to unmarshal into.  If a dict, it should have str keys
+            with __init__ function values, the key will be the row header
     Returns:
         List of instances of @cls
     Raises:
         InitArgsError: If instantiation fails
     """
+    if isinstance(cls, dict):
+        cls = cls[_list[0]]
+        _list = _list[1:]
     try:
         return cls(*_list)
     except Exception as ex:
