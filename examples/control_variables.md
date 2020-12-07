@@ -46,11 +46,37 @@ class ControlVars:
 
     # _marshal_exclude_none_keys = ['key1', 'key2']
 
+    # CSV
+
     # Using this when marshalling to CSV or other list types will
     # make this value the first column on every row.  Use this
     # when you are using multiple types as rows in a single CSV
     # document
     _marshal_list_row_header = "row_header"
+
+    # map row headers to input arguments and types
+    _unmarshal_csv_map = {
+        'row_header': {
+            'arg_name': '__init__ arg name',
+            'type': Class,  # Or a factory function
+        }
+    }
+
+    # Set a default input argument and type when no recognized header is in the
+    # row.  This type should not implement _marshal_list_row_header
+    _unmarshal_csv_default_arg = {
+        'arg_name': '__init__ arg name',
+        'type': Class,  # Or a factory function
+    }
+
+    # Set a row header as a singleton (non-list/tuple) field
+    # Multiple rows matching this will overwrite each other.
+    _unmarshal_csv_singletons = {
+        'row_header': {
+            'arg_name': '__init__ arg name',
+            'type': Class,  # Or a factory function
+        }
+    }
 
     def __init__(self, c, z="test", none=None):
         self.c = type_assert(c, float)

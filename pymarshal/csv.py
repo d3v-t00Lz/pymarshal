@@ -59,7 +59,8 @@ def unmarshal_csv(
     Args:
         @iterable: list-or-tuple-of-lists
         @cls:
-            A class that contains the
+            A class that contains one or more of:
+
             _unmarshal_csv_map = {
                 'row_header': {
                     'arg_name': '__init__ arg name',
@@ -68,7 +69,6 @@ def unmarshal_csv(
             }
             field to map row headers to input arguments
 
-            Optional:
             _unmarshal_csv_default_arg = {
                 'arg_name': '__init__ arg name',
                 'type': Class,  # Or a factory function
@@ -76,13 +76,13 @@ def unmarshal_csv(
             to set a default when no recognized header is in the row.
             This type should not implement _marshal_list_row_header
 
-            Optional:
             _unmarshal_csv_singletons = {
                 'row_header': {
                     'arg_name': '__init__ arg name',
                     'type': Class,  # Or a factory function
                 }
             }
+            To set a row header as a singleton (non-list/tuple) field
         @ignore_extras:
             bool, True to ignore unrecognized rows, otherwise ValueError is
             raised when an unrecognized row it encountered
