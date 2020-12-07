@@ -96,6 +96,8 @@ def _check(
             new_obj = unmarshal_dict(obj, cls, ctor=ctor)
             _check_isinstance(new_obj, cls)
             obj = new_obj
+        elif isinstance(obj, (list, tuple)):
+            return ctor(*obj) if ctor else cls(*obj)
         else:
             msg = _msg(obj, cls)
             raise TypeError(msg)

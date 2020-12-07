@@ -199,6 +199,14 @@ def test_type_assert_dict_dynamic():
         # should not raise or change the value
         assert dynamic == type_assert_dict(None, kcls, vcls, dynamic=dynamic)
 
+def test_type_assert_list():
+    class A:
+        def __init__(self, a, b):
+            self.a = a
+            self.b = b
+    a = type_assert([1, 2], A)
+    assert a.a == 1 and a.b == 2, a.__dict__
+
 def test__check_false_to_none():
     for val, t in (
         (0, int),

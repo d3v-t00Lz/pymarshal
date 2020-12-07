@@ -14,5 +14,5 @@ def pm_assert(
     """
     if not condition:
         raise exc(msg + "\n" + str(context))
-    return ret
+    return ret if ret is not None else condition
 
