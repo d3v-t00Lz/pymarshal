@@ -8,6 +8,7 @@ from .util.type import *
 
 
 __all__ = [
+    'csv_cast_empty_str_to_none',
     'InitArgsError',
     'marshal_csv',
     'pm_assert',
@@ -21,7 +22,18 @@ CSV_TYPES = (
     float,
     int,
     str,
+    type(None),
 )
+
+def csv_cast_empty_str_to_none(_type):
+    """ Handle the Python csv module converting None to empty str
+        Set the cast_to= argument of fields with allow_none=True to
+        the output of this function call, and cast_from=str.
+
+        @type: type-or-constructor, will be called on the input if != ''
+        @return: None, or an instance of @_type
+    """
+    return lambda x: None if x == '' else _type(x)
 
 def marshal_csv(
     iterable,

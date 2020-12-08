@@ -95,3 +95,8 @@ def test_marshal_csv_dict():
     assert u.a == 1, u.a
     assert u.b == 2, u.b
 
+def test_csv_cast_empty_str_to_none():
+    func = csv_cast_empty_str_to_none(int)
+    assert func('') is None
+    assert func('23') == 23
+
