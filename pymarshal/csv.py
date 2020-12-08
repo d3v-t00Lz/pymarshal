@@ -42,6 +42,16 @@ def marshal_csv(
     Returns:
         dict
     """
+    if (
+        hasattr(iterable, '_marshal_csv_dict')
+        and
+        iterable._marshal_csv_dict
+    ):
+        return [
+            [k, iterable.__dict__[k]]
+            for k in sorted(iterable.__dict__.keys())
+            if isinstance(iterable.__dict__[k], types)
+        ]
     return [
         marshal_list(
             x,
@@ -87,6 +97,14 @@ def unmarshal_csv(
             bool, True to ignore unrecognized rows, otherwise ValueError is
             raised when an unrecognized row it encountered
     """
+    if (
+        hasattr(cls, '_marshal_csv_dict')
+        and
+        cls._marshal_csv_dict
+    ):
+        kwargs = {x: y for x, y in iterable}
+        return cls(**kwargs)
+
     if hasattr(cls, '_unmarshal_csv_map'):
         csv_map = cls._unmarshal_csv_map
     else:

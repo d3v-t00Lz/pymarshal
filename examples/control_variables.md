@@ -78,6 +78,11 @@ class ControlVars:
         }
     }
 
+    # Specify that the object should not be iterated user __iter__, but
+    # marshalled into a list of key/value pairs in the format:
+    # field_name,value
+    _marshal_csv_dict = True
+
     def __init__(self, c, z="test", none=None):
         self.c = type_assert(c, float)
         # this will be ignored when marshalling because

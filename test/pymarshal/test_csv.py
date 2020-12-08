@@ -81,3 +81,17 @@ def test_unmarshal_csv_raises_value_error():
     with pytest.raises(ValueError):
         unmarshal_csv([[1, 2]], A)
 
+def test_marshal_csv_dict():
+    class A:
+        _marshal_csv_dict = True
+        def __init__(self, a, b):
+            self.a = a
+            self.b = b
+    a = A(1, 2)
+    m = marshal_csv(a)
+    assert m[0] == ['a', 1], m
+    assert m[1] == ['b', 2], m
+    u = unmarshal_csv(m, A)
+    assert u.a == 1, u.a
+    assert u.b == 2, u.b
+
