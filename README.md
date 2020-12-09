@@ -13,10 +13,10 @@ Support for the YAML API doc format has been dropped.  If you need this, use
 1.6.2
 
 ## Currently supported serialization formats
-  - [JSON](https://github.com/j3ffhubb/pymarshal/tree/master/examples/usage_json.md)
-  - [BSON](https://github.com/j3ffhubb/pymarshal/tree/master/examples/usage_bson.md)
-  - [YAML](https://github.com/j3ffhubb/pymarshal/tree/master/examples/usage_yaml.md)
-  - [CSV](https://github.com/j3ffhubb/pymarshal/tree/master/examples/usage_csv.md)
+  - [JSON](https://github.com/stargateaudio/pymarshal/tree/master/examples/usage_json.md)
+  - [BSON](https://github.com/stargateaudio/pymarshal/tree/master/examples/usage_bson.md)
+  - [YAML](https://github.com/stargateaudio/pymarshal/tree/master/examples/usage_yaml.md)
+  - [CSV](https://github.com/stargateaudio/pymarshal/tree/master/examples/usage_csv.md)
 
 As YAML is compatible with JSON, use PyYAML to load or dump data
 with the `pymarshal.json` module, there is no explicit YAML module.
@@ -29,7 +29,7 @@ using `pip install pymarshal`
 pymarshal is compatible with Python2.7, and Python3.x, althuogh Python2.7
 is no longer tested against and is unsupported.
 
-[CLICK HERE](https://github.com/j3ffhubb/pygo) for an example of a
+[CLICK HERE](https://github.com/stargateaudio/pygo) for an example of a
 modern REST API that uses PyMarshal
 
 ## Overview
@@ -66,7 +66,9 @@ a normal, named method.
 Your `__init__` methods should only use simple assignment through the
 `type_assert` functions.  If you have a use-case for a constructor that
 does more than simple assignment, use a separate
-['factory' static method](https://github.com/j3ffhubb/pymarshal/tree/master/examples/factory.md).
+['factory' static method](
+  https://github.com/stargateaudio/pymarshal/tree/master/examples/factory.md
+).
 
 There is also:
   - `type_assert_iter` for iterables
@@ -77,9 +79,11 @@ Rather than using the Golang "tag" syntax, simply create a
 and any re-named keys will be swapped before being passed to the
 class constructor or before being marshalled to JSON.  The full list
 of control variables are documented
-[HERE](https://github.com/j3ffhubb/pymarshal/tree/master/examples/control_variables.md).
+[HERE](
+  https://github.com/stargateaudio/pymarshal/tree/master/examples/control_variables.md
+).
 
 ## Examples
 
-[Examples](https://github.com/j3ffhubb/pymarshal/tree/master/examples/)
+[Examples](https://github.com/stargateaudio/pymarshal/tree/master/examples/)
 

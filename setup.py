@@ -11,7 +11,7 @@ from setuptools.command.test import test as TestCommand
 
 
 NAME = "pymarshal"
-URL = 'https://github.com/j3ffhubb/pymarshal'
+URL = 'https://github.com/stargateaudio/pymarshal'
 DESCRIPTION = (
     "Pythonic implementation of Golang's (un)marshalling of structs "
     "to/from various data serialization formats"
@@ -59,7 +59,7 @@ setuptools.setup(
     name=NAME,
     version=VERSION,
     author="Pymarshal Team",
-    author_email='j3ffhubb@users.noreply.github.com',
+    author_email='stargateaudio@noreply.github.com',
     license='BSD',
     description=DESCRIPTION,
     long_description=open('README.md', 'rt').read(),
