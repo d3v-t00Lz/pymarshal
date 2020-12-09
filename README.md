@@ -26,11 +26,8 @@ It is recommended that you install
 [from PyPI](https://pypi.python.org/pypi/pymarshal/)
 using `pip install pymarshal`
 
-pymarshal is compatible with Python2.7, and Python3.x, althuogh Python2.7
-is no longer tested against and is unsupported.
-
-[CLICK HERE](https://github.com/stargateaudio/pygo) for an example of a
-modern REST API that uses PyMarshal
+pymarshal is compatible with Python2.7, and Python3.x.
+However, Python2.7 is no longer tested against and is unsupported.
 
 ## Overview
 
