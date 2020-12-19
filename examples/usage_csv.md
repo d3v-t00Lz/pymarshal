@@ -1,3 +1,10 @@
+# CSV
+
+Also see [control variables](
+  https://github.com/stargateaudio/pymarshal/blob/master/examples/control_variables.md
+) for CSV-related options to marshal and unmarshal complex types
+to/from a single CSV list.
+
 ```python
 >>> from pymarshal.csv import *
 >>> class Test:

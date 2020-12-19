@@ -78,7 +78,7 @@ class ControlVars:
         }
     }
 
-    # Specify that the object should not be iterated user __iter__, but
+    # Specify that the object should not be iterated using __iter__, but
     # marshalled into a list of key/value pairs in the format:
     # field_name,value
     _marshal_csv_dict = True
