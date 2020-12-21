@@ -41,6 +41,7 @@ def _check(
     ctor=None,
     false_to_none=False,
     check=None,
+    choices=None,
 ):
     if (
         allow_none
@@ -97,11 +98,14 @@ def _check(
             _check_isinstance(new_obj, cls)
             obj = new_obj
         elif isinstance(obj, (list, tuple)):
-            return ctor(*obj) if ctor else cls(*obj)
+            obj = ctor(*obj) if ctor else cls(*obj)
+            _check_choices(obj, choices)
+            return obj
         else:
             msg = _msg(obj, cls)
             raise TypeError(msg)
 
+    _check_choices(obj, choices)
     return obj
 
 
@@ -176,8 +180,6 @@ def type_assert(
             TypeError:  If @obj is not an instance of @cls
             ValueError: If @check is not None and @obj fails @check
     """
-    _check_choices(obj, choices)
-
     return _check(
         obj,
         cls,
@@ -188,6 +190,7 @@ def type_assert(
         ctor=ctor,
         false_to_none=false_to_none,
         check=check,
+        choices=choices,
     )
 
 
@@ -254,10 +257,6 @@ def type_assert_iter(
 
     _check_dstruct(iterable, objcls)
 
-    if choices is not None:
-        for obj in iterable:
-            _check_choices(obj, choices)
-
     if (
         iterable is None
         and
@@ -275,6 +274,7 @@ def type_assert_iter(
             ctor=ctor,
             false_to_none=false_to_none,
             check=check,
+            choices=choices,
         ) for obj in iterable
     )
 
