@@ -2,6 +2,8 @@
 
 """
 
+from typing import Any, Callable, Iterable, Optional, Tuple
+
 from .init_args import init_args
 from .key_swap import key_swap
 
@@ -17,9 +19,12 @@ __all__ = [
 ]
 
 
-def _get_dict(obj):
+def _get_dict(
+    obj: Any,
+) -> Tuple[bool, dict]:
     """ Hack to work around the lack of __dict__ when __slots__ is used
-
+    Returns:
+        (has slots, dictionary of object fields)
     """
     if isinstance(obj, dict):
         return False, obj
@@ -40,15 +45,15 @@ class ExtraKeysError(Exception):
     """
     def __init__(
         self,
-        cls,
-        diff,
+        cls: Any,
+        diff: dict,
     ):
         """ Note that type_assert can't be used because it would
             create a circular dependency.
 
         Args:
-            cls,  type, The type that was attempted to unmarshal into
-            diff: dict, The extra arguments that were passed to @cls
+            cls,  The type that was attempted to unmarshal into
+            diff: The extra arguments that were passed to @cls
         """
         msg = "\n".join([
             "", # Newline to make the output cleaner
@@ -73,10 +78,10 @@ class InitArgsError(Exception):
     """
     def __init__(
         self,
-        cls,
-        cls_args,
-        kwargs,
-        ex,
+        cls: Any,
+        cls_args: Iterable[Any],
+        kwargs: dict,
+        ex: Exception,
     ):
         """ Note that type_assert can't be used because it would
             create a circular dependency.
@@ -94,7 +99,7 @@ class InitArgsError(Exception):
             "ctor: {}".format(cls),
             "ctor_args: {}".format(cls_args),
             "args (after removing args not in ctor_args): {}".format(kwargs),
-            "only in ctor_args".format(
+            "only in ctor_args: {}".format(
                 [x for x in cls_args if x not in kwargs]
             ),
             "exception: {}".format(ex),
@@ -128,9 +133,9 @@ def _marshal_value(
         return marshal_dict(v, types)
 
 def _marshal_list(
-    _list,
+    _list: Iterable,
     types,
-):
+) -> list:
     return [
         x if isinstance(x, (bool, float, int, str, type(None)))
         else marshal_dict(x, types)
@@ -138,12 +143,12 @@ def _marshal_list(
     ]
 
 def marshal_dict(
-    obj,
+    obj: object,
     types,
-    method=None,
-    fields=None,
+    method: Optional[str]=None,
+    fields: Optional[Iterable[str]]=None,
     **m_kwargs
-):
+) -> dict:
     """ Recursively marshal a Python object to a dict
         that can be passed to json.{dump,dumps}, a web client,
         or a web server, document database, etc...
@@ -159,10 +164,7 @@ def marshal_dict(
                   @types must have this method defined.
         fields:   None-list-of-str, Explicitly marshal only these fields
         m_kwargs: Keyword arguments to pass to @method
-    Returns:
-        dict
     """
-    result = {}
     has_slots, d = _get_dict(obj)
 
     if fields:
@@ -198,20 +200,19 @@ def marshal_dict(
     }
 
 def unmarshal_dict(
-    obj,
-    cls,
-    allow_extra_keys=True,
-    ctor=None,
+    obj: dict,
+    cls: Any,
+    allow_extra_keys: bool=True,
+    ctor: Optional[Callable]=None,
 ):
     """ Unmarshal @obj into @cls
 
     Args:
-        obj:              dict, The dict to unmarshal into @cls
-        cls:              type, The class to unmarshal into
-        allow_extra_keys: bool, False to raise an exception when extra
+        obj:              The dict to unmarshal into @cls
+        cls:              The class to unmarshal into
+        allow_extra_keys: False to raise an exception when extra
                           keys are present, True to ignore
-        ctor:             None-or-method:  Use this as a constructor instead
-                          of __init__
+        ctor:             Use this as a constructor instead of __init__
     Returns:
         instance of @cls
     Raises:
@@ -251,16 +252,14 @@ def unmarshal_dict(
 
 
 def marshal_list(
-    obj,
+    obj: Any,
     types,
     fields=None,
-):
+) -> list:
     """ Marshal @obj into a list
     Args:
-        obj:   object, the object to marshal into a list
-        types: iterable, a collection of valid types
-    Returns:
-        list
+        obj:   the object to marshal into a list
+        types: an iterable of valid types for this serialization format
     Raises:
         ValueError: If the class fields contain invalid types
     """

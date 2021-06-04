@@ -4,15 +4,18 @@
 
 import sys
 import types
+from typing import Any, List
 
 
-def init_args(cls):
+def init_args(
+    cls: Any,
+) -> List[str]:
     """ Return the __init__ args (minus 'self') for @cls
 
     Args:
         cls: class, instance or callable
     Returns:
-        list of str, the arguments minus 'self'
+        The arguments minus 'self'
     """
     # This looks insanely goofy, but seems to literally be the
     # only thing that actually works.  Your obvious ways to

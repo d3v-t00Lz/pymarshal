@@ -1,10 +1,9 @@
 """
 
 """
-# Prevent Python2 from getting confused about 'bson' and 'pymarshal.bson'
-from __future__ import absolute_import
 import datetime
 import time
+from typing import Iterable, List, Optional
 
 # Will raise an import error if the user hasn't installed 'bson'
 import bson
@@ -29,7 +28,7 @@ __all__ = [
 ]
 
 
-BSON_TYPES = (
+BSON_TYPES: tuple = (
     bool,
     bson.ObjectId,
     datetime.datetime,
@@ -64,14 +63,14 @@ class MongoDocument:
             )
     """
     # If you need to override this, just add '_id' to the new list
-    _marshal_exclude_none_keys = ['_id']
+    _marshal_exclude_none_keys:List[str] = ['_id']
 
     def json(
         self,
-        include_id=False,
-        date_fmt=None,
-        object_id_fmt=str,
-    ):
+        include_id: bool=False,
+        date_fmt: Optional[str]=None,
+        object_id_fmt: type=str,
+    ) -> dict:
         """ Helper method to convert to MongoDB documents to JSON
 
             This includes helpers to convert non-JSON compatible types
@@ -79,16 +78,14 @@ class MongoDocument:
             classes.
 
         Args:
-            include_id:    bool, True to cast _id to a str,
+            include_id:    True to cast _id to a str,
                            False to omit from the result
-            date_fmt:      str-or-None:  None to cast to UNIX timestamp,
+            date_fmt:      None to cast to UNIX timestamp,
                            str (strftime format) to convert to string,
                            for example: '%Y-%m-%d_%H:%M:%S'
-            object_id_fmt: type, Cast the bson.ObjectId's to this format,
+            object_id_fmt: Cast the bson.ObjectId's to this format,
                            or None to exclude.  This only applies to
                            ObjectId variables other than _id.
-        Returns:
-            dict
         """
         has_slots, d = _get_dict(self)
         _id = self._id
@@ -144,21 +141,19 @@ class MongoDocument:
 
 
 def marshal_bson(
-    obj,
-    types=BSON_TYPES,
-    fields=None,
-):
+    obj: object,
+    types: Iterable=BSON_TYPES,
+    fields: Optional[List[str]]=None,
+) -> dict:
     """ Recursively marshal a Python object to a BSON-compatible dict
         that can be passed to PyMongo, Motor, etc...
 
     Args:
-        obj:    object, It's members can be nested Python
+        obj:    It's members can be nested Python
                 objects which will be converted to dictionaries
-        types:  tuple-of-types, The BSON primitive types, typically
+        types:  The BSON primitive types, typically
                 you would not change this
-        fields: None-list-of-str, Explicitly marshal only these fields
-    Returns:
-        dict
+        fields: Explicitly marshal only these fields
     """
     return marshal_dict(
         obj,
@@ -168,19 +163,19 @@ def marshal_bson(
 
 
 def unmarshal_bson(
-    obj,
-    cls,
-    allow_extra_keys=True,
+    obj: dict,
+    cls: type,
+    allow_extra_keys: bool=True,
     ctor=None,
 ):
     """ Unmarshal @obj into @cls
 
     Args:
-        obj:              dict, A BSON object
-        cls:              type, The class to unmarshal into
-        allow_extra_keys: bool, False to raise an exception when extra
+        obj:              A BSON object
+        cls:              The class to unmarshal into
+        allow_extra_keys: False to raise an exception when extra
                           keys are present, True to ignore
-        ctor:             None-or-static-method: Use this method as the
+        ctor:             Use this method as the
                           constructor instead of __init__
     Returns:
         instance of @cls

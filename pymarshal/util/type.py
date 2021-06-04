@@ -2,6 +2,8 @@
 
 """
 
+from typing import Optional
+
 from .marshal import unmarshal_dict
 from .key_swap import key_swap
 import inspect
@@ -34,12 +36,12 @@ def _check_isinstance(obj, cls):
 def _check(
     obj,
     cls,
-    allow_none=False,
+    allow_none: bool=False,
     cast_from=None,
     cast_to=None,
     dynamic=None,
     ctor=None,
-    false_to_none=False,
+    false_to_none: bool=False,
     check=None,
     choices=None,
 ):
@@ -127,13 +129,13 @@ def _check_choices(obj, choices):
 def type_assert(
     obj,
     cls,
-    allow_none=False,
+    allow_none: bool=False,
     cast_from=None,
     cast_to=None,
     dynamic=None,
     choices=None,
     ctor=None,
-    desc=None,
+    desc: Optional[str]=None,
     false_to_none=False,
     check=None,
 ):
@@ -203,9 +205,9 @@ def type_assert_iter(
     objcls=None,
     choices=None,
     ctor=None,
-    allow_none=False,
-    desc=None,
-    false_to_none=False,
+    allow_none: bool=False,
+    desc: str=None,
+    false_to_none: bool=False,
     check=None,
 ):
     """ Checks that every object in @iterable is an instance of @cls
@@ -283,14 +285,14 @@ def type_assert_dict(
     d,
     kcls=None,
     vcls=None,
-    allow_none=False,
+    allow_none: bool=False,
     cast_from=None,
     cast_to=None,
     dynamic=None,
     objcls=None,
     ctor=None,
-    desc=None,
-    false_to_none=False,
+    desc: str=None,
+    false_to_none: bool=False,
     check=None,
 ):
     """ Checks that every key/value in @d is an instance of @kcls: @vcls

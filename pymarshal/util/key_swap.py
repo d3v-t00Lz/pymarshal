@@ -1,6 +1,7 @@
 """
 
 """
+from typing import Any, Dict
 
 __all__ = [
     'key_swap',
@@ -8,22 +9,20 @@ __all__ = [
 
 
 def key_swap(
-    d,
-    cls,
-    marshal
-):
+    d: Dict[str, str],
+    cls: Any,
+    marshal: bool,
+) -> dict:
     """ Swap the keys in a dictionary
 
         Args:
-            d:       dict, The dict to swap keys in
+            d:       The dict to swap keys in
             cls:     class, If the class has a staticly defined
                      _marshal_key_swap and/or _unmarshal_key_swap dict,
                      the keys will be swapped.
                      Otherwise @d is returned
-            marshal: bool, True if marshalling class to JSON,
+            marshal: True if marshalling class to JSON,
                      False if unmarshalling JSON to class
-        Returns:
-            dict
     """
     dname = '_{}marshal_key_swap'.format("" if marshal else "un")
     if hasattr(cls, dname):

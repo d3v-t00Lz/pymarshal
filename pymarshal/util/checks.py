@@ -3,6 +3,7 @@
     the type assert functions
 """
 
+from typing import Iterable
 
 __all__ = [
     'check_dups',
@@ -11,7 +12,7 @@ __all__ = [
 
 def check_dups(
     iterable,
-    debug_limit=1000,
+    debug_limit: int=1000,
 ):
     """ Checks an iterable for duplicates
 

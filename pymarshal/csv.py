@@ -2,6 +2,7 @@
 
 """
 
+from typing import Any, Iterable, List, Optional, Tuple, Union
 from .util.marshal import *
 from .util.pm_assert import pm_assert
 from .util.type import *
@@ -25,7 +26,9 @@ CSV_TYPES = (
     type(None),
 )
 
-def csv_cast_empty_str_to_none(_type):
+def csv_cast_empty_str_to_none(
+    _type: Any,
+) -> Any:
     """ Handle the Python csv module converting None to empty str
         Set the cast_to= argument of fields with allow_none=True to
         the output of this function call, and cast_from=str.
@@ -36,23 +39,20 @@ def csv_cast_empty_str_to_none(_type):
     return lambda x: None if x == '' else _type(x)
 
 def marshal_csv(
-    iterable,
+    iterable: Any,
     types=CSV_TYPES,
-    fields=None,
-):
+    fields: Optional[List[str]]=None,
+) -> list:
     """ Marshal a list of Python objects to a CSV-compatible list of lists
         that can be passed to csv.writer.writerows.
         If @iterable is a class instance, it must offer a method to iterate
         through it's objects, or implement __iter__.
 
     Args:
-        iterable: list, A list of objects that do not contain nested objects,
+        iterable: A list of objects that do not contain nested objects,
                   all fields must be of types in @types
-        types:    tuple-of-types, The primitive types, typically
-                  you would not change this
-        fields:   None-or-list-of-str, Explicitly marshal only these fields
-    Returns:
-        dict
+        types:    The primitive types, typically you would not change this
+        fields:   Explicitly marshal only these fields
     """
     if (
         hasattr(iterable, '_marshal_csv_dict')
@@ -73,13 +73,13 @@ def marshal_csv(
     ]
 
 def unmarshal_csv(
-    iterable,
-    cls,
-    ignore_extras=False,
-):
+    iterable: Iterable,
+    cls: Any,
+    ignore_extras: bool=False,
+) -> Any:
     """ Unmarshal @iterable into a single instance of @cls
     Args:
-        @iterable: list-or-tuple-of-lists
+        @iterable: The data structure of CSV data
         @cls:
             A class that contains one or more of:
 
@@ -106,7 +106,7 @@ def unmarshal_csv(
             }
             To set a row header as a singleton (non-list/tuple) field
         @ignore_extras:
-            bool, True to ignore unrecognized rows, otherwise ValueError is
+            True to ignore unrecognized rows, otherwise ValueError is
             raised when an unrecognized row it encountered
     """
     if (
@@ -165,8 +165,8 @@ def unmarshal_csv(
     return cls(**kwargs)
 
 def unmarshal_csv_list(
-    iterable,
-    cls,
+    iterable: Iterable,
+    cls: Any,
 ):
     """ Unmarshal @iterable into a list of @cls
         Assumes that @iterable are all a single type

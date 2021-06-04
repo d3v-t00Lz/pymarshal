@@ -1,18 +1,21 @@
+from typing import Any, Optional
+
+
 def pm_assert(
     condition,
-    exc=Exception,
-    context=None,
-    msg="",
-    ret=None,
-):
+    exc: Any=Exception,
+    context: Any=None,
+    msg: str="",
+    ret: Optional[Any]=None,
+) -> Optional[Any]:
     """ Generic assertion that can be used anywhere
-        @condition: bool, A condition to assert is true
-        @exc:       Exception type, Raise if @condition is False
-        @context:   Any, The relevant data structures
-        @msg:       str, Any additional text to include
-        @ret:       Any, Optional return value if @condition is True
+        @condition: A condition to assert is true
+        @exc:       Raise if @condition is False
+        @context:   The relevant data structures
+        @msg:       Any additional text to include
+        @ret:       return value if @condition is True
     """
     if not condition:
-        raise exc(msg + "\n" + str(context))
+        raise exc(f"{msg}\n{context}")
     return ret if ret is not None else condition
 
