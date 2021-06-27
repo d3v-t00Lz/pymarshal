@@ -54,10 +54,15 @@ class ControlVars:
     # document
     _marshal_list_row_header = "row_header"
 
-    # map row headers to input arguments and types
+    # map row headers to input arguments and types.
+    # The __init__ args should all use type_assert_iter and accept a list
+    # as an argument
     _unmarshal_csv_map = {
+        # The value of a row header in the CSV
         'row_header': {
+            # The name of the __init__ argument @row_header maps to
             'arg_name': '__init__ arg name',
+            # This type should implement _marshal_list_row_header
             'type': Class,  # Or a factory function
         }
     }

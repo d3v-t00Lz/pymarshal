@@ -83,28 +83,33 @@ def unmarshal_csv(
         @cls:
             A class that contains one or more of:
 
+            # Maps CSV row headers to iterable constructor arguments that
+            # use type_assert_iter to assign a type to a field that accepts
+            # type list.
             _unmarshal_csv_map = {
                 'row_header': {
                     'arg_name': '__init__ arg name',
+                    # Class should implement _marshal_list_row_header
                     'type': Class,  # Or a factory function
                 }
             }
-            field to map row headers to input arguments
 
+            # Set a default when no recognized header is in the row.
+            # This type should not implement _marshal_list_row_header
             _unmarshal_csv_default_arg = {
                 'arg_name': '__init__ arg name',
+                # Class should not implement _marshal_list_row_header
                 'type': Class,  # Or a factory function
             }
-            to set a default when no recognized header is in the row.
-            This type should not implement _marshal_list_row_header
 
+            # Set a row header as a singleton (non-list/tuple) field
             _unmarshal_csv_singletons = {
                 'row_header': {
                     'arg_name': '__init__ arg name',
+                    # Class should implement _marshal_list_row_header
                     'type': Class,  # Or a factory function
                 }
             }
-            To set a row header as a singleton (non-list/tuple) field
         @ignore_extras:
             True to ignore unrecognized rows, otherwise ValueError is
             raised when an unrecognized row it encountered
