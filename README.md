@@ -11,9 +11,11 @@ See [control variables](
 https://github.com/stargateaudio/pymarshal/blob/master/examples/control_variables.md
 ) for the many options that can be configured per-class.
 
-## v2.0+
-Support for the YAML API docs docstring format has been dropped.  If you need
-this, use 1.6.2
+## PyMarshal v2.0+
+Support for the following has been removed:
+- YAML docstring API docs format
+- Python2
+If you need any of these, use 1.6.2
 
 ## Currently supported serialization formats
   - [JSON](https://github.com/stargateaudio/pymarshal/blob/master/examples/usage_json.md)
@@ -29,8 +31,6 @@ It is recommended that you install
 [from PyPI](https://pypi.python.org/pypi/pymarshal/)
 using `pip install pymarshal`
 
-pymarshal is compatible with Python2.7, and Python3.x.
-However, Python2.7 is no longer tested against and is unsupported.
 
 ## Overview
 
