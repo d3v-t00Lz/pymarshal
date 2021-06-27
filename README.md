@@ -15,6 +15,7 @@ https://github.com/stargateaudio/pymarshal/blob/master/examples/control_variable
 Support for the following has been removed:
 - YAML docstring API docs format
 - Python2
+
 If you need any of these, use 1.6.2
 
 ## Currently supported serialization formats
