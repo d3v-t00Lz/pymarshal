@@ -2,11 +2,12 @@
 
 """
 
-from typing import Optional
+from typing import Any, Optional
 
 from .marshal import unmarshal_dict
 from .key_swap import key_swap
 import inspect
+import os
 
 
 __all__ = [
@@ -127,17 +128,18 @@ def _check_choices(obj, choices):
 
 
 def type_assert(
-    obj,
-    cls,
+    obj: Any,
+    cls: Any,
     allow_none: bool=False,
-    cast_from=None,
-    cast_to=None,
+    cast_from: Any=None,
+    cast_to: Any=None,
     dynamic=None,
     choices=None,
-    ctor=None,
+    ctor: Any=None,
     desc: Optional[str]=None,
-    false_to_none=False,
+    false_to_none: bool=False,
     check=None,
+    env_var: str=None,
 ):
     """ Assert that @obj is an instance of @cls
 
@@ -148,40 +150,54 @@ def type_assert(
         is an instance of dict and @cls is not dict
 
         Args:
-            obj:        object instance, The object to type assert
-            cls:        type,  The class type to assert
-            allow_none: bool, True to allow '@obj is None', otherwise False
-            cast_from:  type-or-tuple-of-types, If @obj is an instance
-                        of this type(s), cast it to @cast_to
-            cast_to:    type, The type to cast @obj to if it's an instance
-                        of @cast_from, or None to cast to @cls.
-                        If you need more than type(x), use a lambda or
-                        factory function.
-            dynamic:    @cls, A dynamic default value if @obj is None,
-                        and @dynamic is not None.  @allow_none should be False
-                        Valid uses:
-                            datetime.datetime.now()
-                            int(time.time())
-                            # Or, to avoid the Python singleton bug when
-                            # using arg=[], for example:
-                            [], {}, set()
-            choices:    iterable-or-None, If not None, @obj must
-                        be in @choices
-            ctor:       None-or-static-method, Use this method as the
-                        constructor instead of __init__
-            desc:       None-or-string, an optional description for this field,
-                        for using this function to fully replace docstrings
-            false_to_none: bool, True to cast falsey values such as "", 0, [],
-                        to None
-            check:      None-lambda-function, Single argument function to check
-                        a value, return False if not valid, for example:
-                            lambda x: x >= 0 and x < 256
+            obj:
+                object instance, The object to type assert
+            cls:
+                type,  The class type to assert
+            allow_none:
+                bool, True to allow '@obj is None', otherwise False
+            cast_from:
+                type-or-tuple-of-types, If @obj is an instance of this type(s),
+                cast it to @cast_to
+            cast_to:
+                type, The type to cast @obj to if it's an instance of
+                @cast_from, or None to cast to @cls.  If you need more than
+                type(x), use a lambda or factory function.
+            dynamic:
+                @cls, A dynamic default value if @obj is None, and @dynamic is
+                not None.  @allow_none should be False
+                Valid uses:
+                    datetime.datetime.now()
+                    int(time.time())
+                    # Or, to avoid the Python singleton bug when
+                    # using arg=[], for example:
+                    [], {}, set()
+            choices:
+                iterable-or-None, If not None, @obj must be in @choices
+            ctor:
+                None-or-static-method, Use this method as the constructor
+                instead of __init__
+            desc:
+                None-or-string, an optional description for this field,
+                for using this function to fully replace docstrings
+            false_to_none:
+                bool, True to cast falsey values such as "", 0, [], to None
+            check:
+                None-lambda-function, Single argument function to check a
+                value, return False if not valid, for example:
+                    lambda x: x >= 0 and x < 256
+            env_var:
+                The name of an environment variable that can override the
+                @obj value.  The type_assert must be configured to accept
+                a str and convert it to the correct type, if @cls is not str
         Returns:
             @obj
         Raises:
             TypeError:  If @obj is not an instance of @cls
             ValueError: If @check is not None and @obj fails @check
     """
+    if env_var and env_var in os.environ:
+        obj = os.environ[env_var]
     return _check(
         obj,
         cls,

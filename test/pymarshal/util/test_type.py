@@ -3,6 +3,7 @@
 """
 
 import collections
+import os
 import pytest
 
 from pymarshal.util.type import *
@@ -246,4 +247,10 @@ def test__check_from_terminal():
             _check({}, dict, check=lambda x: False)
     finally:
         inspect.getsource = getsource
+
+def test_env_var():
+    env_var = 'PYMARSHAL_TEST'
+    os.environ[env_var] = "y"
+    value = type_assert("x", str, env_var=env_var)
+    assert value == 'y', value
 
