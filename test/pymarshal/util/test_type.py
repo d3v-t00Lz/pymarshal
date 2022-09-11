@@ -254,3 +254,21 @@ def test_env_var():
     value = type_assert("x", str, env_var=env_var)
     assert value == 'y', value
 
+def test_env_var_cast():
+    env_var = 'PYMARSHAL_TEST'
+    os.environ[env_var] = "6"
+    value = type_assert(
+        None,
+        int,
+        cast_from=str,
+        env_var=env_var,
+        allow_none=False,
+    )
+    assert value == 6, value
+
+def test_env_var_none():
+    env_var = 'PYMARSHAL_TEST'
+    os.environ[env_var] = "y"
+    value = type_assert(None, str, env_var=env_var, allow_none=False)
+    assert value == 'y', value
+
