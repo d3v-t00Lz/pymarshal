@@ -88,7 +88,7 @@ class MongoDocument:
                            ObjectId variables other than _id.
         """
         has_slots, d = _get_dict(self)
-        _id = self._id
+        _id = self._id  # type: ignore
         if not include_id:
             self._id = None
 
