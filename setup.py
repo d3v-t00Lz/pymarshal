@@ -81,9 +81,8 @@ with open('README.md', 'rt') as f:
 setup(
     name=NAME,
     version=VERSION,
-    author="TODO",
-    author_email="TODO",
-    license="TODO",
+    author="Pymarshal Team",
+    author_email="pymarshal@noreply.gitlab.com",
     description=DESCRIPTION,
     long_description=LONG_DESC,
     url=URL,
