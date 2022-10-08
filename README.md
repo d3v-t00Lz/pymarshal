@@ -7,9 +7,8 @@ Go's implementation such as:
   - extra keys being silently ignored
   - lack of mandatory fields
   - lack of default values
-See [control variables](
-https://github.com/stargateaudio/pymarshal/blob/master/doc/control_variables.md
-) for the many options that can be configured per-class.
+See [control variables](/doc/control_variables.md) for the many options
+that can be configured per-class.
 
 ## PyMarshal v2.0+
 Support for the following has been removed:
@@ -19,10 +18,10 @@ Support for the following has been removed:
 If you need any of these, use 1.6.2
 
 ## Currently supported serialization formats
-  - [JSON](https://github.com/stargateaudio/pymarshal/blob/master/doc/usage_json.md)
-  - [BSON](https://github.com/stargateaudio/pymarshal/blob/master/doc/usage_bson.md)
-  - [YAML](https://github.com/stargateaudio/pymarshal/blob/master/doc/usage_yaml.md)
-  - [CSV](https://github.com/stargateaudio/pymarshal/blob/master/doc/usage_csv.md)
+  - [JSON](/doc/usage_json.md)
+  - [BSON](/doc/usage_bson.md)
+  - [YAML](/doc/usage_yaml.md)
+  - [CSV](/doc/usage_csv.md)
 
 As YAML is compatible with JSON, use PyYAML to load or dump data
 with the `pymarshal.json` module, there is no explicit YAML module.

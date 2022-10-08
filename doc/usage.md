@@ -18,11 +18,11 @@ Example:
 ```
 ORG=myorgname
 NEW_PROJECT=some_name
-git clone https://github.com/d3v-t00Lz/python-template.git $NEW_PROJECT
+git clone https://gitlab.com/d3v-t00Lz/python-template.git $NEW_PROJECT
 cd $NEW_PROJECT
 tools/fork.py -cqaDdrmwvP  $ORG $NEW_PROJECT
 # Assumes that this repository was already created
-git remote add origin git@github.com:$ORG/$NEW_PROJECT.git
+git remote add origin git@gitlab.com:$ORG/$NEW_PROJECT.git
 git push -u origin main
 ```
 
