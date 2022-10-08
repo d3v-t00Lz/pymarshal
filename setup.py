@@ -85,6 +85,7 @@ setup(
     author_email="pymarshal@noreply.gitlab.com",
     description=DESCRIPTION,
     long_description=LONG_DESC,
+    long_description_content_type='text/markdown',
     url=URL,
     packages=find_packages(where='src'),
     package_dir = {'': 'src'},
