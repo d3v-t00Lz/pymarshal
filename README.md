@@ -67,9 +67,7 @@ a normal, named method.
 Your `__init__` methods should only use simple assignment through the
 `type_assert` functions.  If you have a use-case for a constructor that
 does more than simple assignment, use a separate
-['factory' static method](
-  https://github.com/stargateaudio/pymarshal/blob/master/doc/factory.md
-).
+['factory' static method](/doc/factory.md).
 
 There is also:
   - `type_assert_iter` for iterables
@@ -79,11 +77,9 @@ Rather than using the Golang "tag" syntax, simply create a
 `_marshal_key_swap` and `_unmarshal_key_swap` dict in your class,
 and any re-named keys will be swapped before being passed to the
 class constructor or before being marshalled to JSON.  The full list
-of control variables are documented [HERE](
-  https://github.com/stargateaudio/pymarshal/blob/master/doc/control_variables.md
-).
+of control variables are documented [HERE](/doc/control_variables.md).
 
 ## Examples
 
-[Examples](https://github.com/stargateaudio/pymarshal/blob/master/doc/)
+[See the documentation folder](/doc/)
 
