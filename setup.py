@@ -75,7 +75,7 @@ def _github_download_url(
 ):
     return f"{url}/archive/{version}.tar.gz"
 
-with open('README.md', 'rt') as f:
+with open('README.rst', 'rt') as f:
     LONG_DESC = f.read()
 
 setup(
