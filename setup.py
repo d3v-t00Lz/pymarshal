@@ -39,9 +39,9 @@ def load_requirements(*fnames):
     return result
 
 NAME = "pymarshal"
-URL = 'https://github.com/d3v-t00Lz/python-template'  # TODO
+URL = 'https://gitlab.com/d3v-t00Lz/pymarshal'
 DESCRIPTION = (
-    "TODO"
+    "Pythonic implementation of Golang struct (un)marshalling"
 )
 
 def _version():
@@ -99,6 +99,15 @@ setup(
     ),
     extras_require={},
     # PyPI
-    download_url=_gitlab_download_url(),  # TODO
-    keywords=[],  # TODO
+    download_url=_gitlab_download_url(),
+    keywords=[
+        'marshal',
+        'unmarshal',
+        'struct',
+        'serialize',
+        'serialization',
+        'json',
+        'bson',
+        'csv',
+    ],
 )
