@@ -1,0 +1,7 @@
+mypy
+tox
+types-pyyaml
+wheel
+
+build
+twine

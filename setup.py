@@ -4,27 +4,53 @@
 """
 
 import os
-import setuptools
 import sys
+from setuptools import setup, find_packages
 
-from setuptools.command.test import test as TestCommand
+assert sys.version_info >= (3, 7), \
+    f"Python >= 3.7 required, have {sys.version}"
 
+PT_EXCLUDE_LIBS = os.environ.get('PT_EXCLUDE_LIBS', '').strip()
+EXCLUDE_LIBS = set(
+    x.strip()
+    for x in PT_EXCLUDE_LIBS.split(',')
+)
+print(EXCLUDE_LIBS)
+
+def load_requirements(*fnames):
+    if PT_EXCLUDE_LIBS == 'ALL':
+        return []
+    result = []
+    for fname in fnames:
+        with open(fname) as f:
+            reqs = [
+                x.strip() for x in f
+                if (
+                    x.strip()
+                    and
+                    not x.strip().startswith('#')
+                )
+            ]
+        result.extend([
+            x for x in reqs
+            if x not in EXCLUDE_LIBS
+        ])
+    print(result)
+    return result
 
 NAME = "pymarshal"
-URL = 'https://github.com/stargateaudio/pymarshal'
+URL = 'https://github.com/d3v-t00Lz/python-template'  # TODO
 DESCRIPTION = (
-    "Pythonic implementation of Golang's (un)marshalling of structs "
-    "to/from various data serialization formats"
+    "TODO"
 )
 
-
 def _version():
-    if 'test' in sys.argv:
-        # avoid triggering a pytest coverage report bug
-        return 'test'
     path = sys.path[:]
     dirname = os.path.dirname(__file__)
-    abspath = os.path.abspath(dirname)
+    abspath = os.path.join(
+        os.path.abspath(dirname),
+        'src',
+    )
     sys.path.insert(
         0,
         abspath,
@@ -36,65 +62,43 @@ def _version():
 
 VERSION = _version()
 
+def _gitlab_download_url(
+    name=NAME,
+    url=URL,
+    version=VERSION,
+):
+    return f"{url}/-/archive/{version}/{name}-{version}.tar.gz"
 
-class PyTest(TestCommand):
-    user_options = [('pytest-args=', 'a', "Arguments to pass to pytest")]
+def _github_download_url(
+    url=URL,
+    version=VERSION,
+):
+    return f"{url}/archive/{version}.tar.gz"
 
-    def initialize_options(self):
-        TestCommand.initialize_options(self)
-        self.pytest_args = [
-            "--cov", NAME,
-            "--cov-report", "html",
-        ]
+with open('README.md', 'rt') as f:
+    LONG_DESC = f.read()
 
-    def run_tests(self):
-        import shlex
-        #import here, because outside the eggs aren't loaded
-        import pytest
-        errno = pytest.main(shlex.split(self.pytest_args))
-        sys.exit(errno)
-
-
-setuptools.setup(
+setup(
     name=NAME,
     version=VERSION,
-    author="Pymarshal Team",
-    author_email='stargateaudio@noreply.github.com',
-    license='BSD',
+    author="TODO",
+    author_email="TODO",
+    license="TODO",
     description=DESCRIPTION,
-    long_description=open('README.md', 'rt').read(),
-    long_description_content_type='text/markdown',
+    long_description=LONG_DESC,
     url=URL,
-    packages=setuptools.find_packages(
-        exclude=["*.test", "*.test.*", "test.*", "test"],
-    ),
+    packages=find_packages(where='src'),
+    package_dir = {'': 'src'},
     include_package_data=True,
-    install_requires=[],
-    tests_require=[
-        'bson',
-        'pytest',
-        'pytest-cov',
-        'PyYAML',
-    ],
-    extras_require={
-        'bson': ['bson']
-    },
-    cmdclass = {'test': PyTest},
-    setup_requires=['pytest-runner'],
+    install_requires=load_requirements(
+        *(
+            os.path.join('requirements', x)
+            for x in os.listdir('requirements')
+            if x not in ('test.txt', 'devel.txt')
+        )
+    ),
+    extras_require={},
     # PyPI
-    download_url="/".join([
-        URL,
-        "archive",
-        "{}.tar.gz".format(VERSION),
-    ]),
-    keywords=[
-        "go",
-        "golang",
-        "json",
-        "bson",
-        "yaml",
-        "marshal",
-        "unmarshal",
-        "struct",
-    ],
+    download_url=_gitlab_download_url(),  # TODO
+    keywords=[],  # TODO
 )

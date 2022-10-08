@@ -8,7 +8,7 @@ Go's implementation such as:
   - lack of mandatory fields
   - lack of default values
 See [control variables](
-https://github.com/stargateaudio/pymarshal/blob/master/examples/control_variables.md
+https://github.com/stargateaudio/pymarshal/blob/master/doc/control_variables.md
 ) for the many options that can be configured per-class.
 
 ## PyMarshal v2.0+
@@ -19,10 +19,10 @@ Support for the following has been removed:
 If you need any of these, use 1.6.2
 
 ## Currently supported serialization formats
-  - [JSON](https://github.com/stargateaudio/pymarshal/blob/master/examples/usage_json.md)
-  - [BSON](https://github.com/stargateaudio/pymarshal/blob/master/examples/usage_bson.md)
-  - [YAML](https://github.com/stargateaudio/pymarshal/blob/master/examples/usage_yaml.md)
-  - [CSV](https://github.com/stargateaudio/pymarshal/blob/master/examples/usage_csv.md)
+  - [JSON](https://github.com/stargateaudio/pymarshal/blob/master/doc/usage_json.md)
+  - [BSON](https://github.com/stargateaudio/pymarshal/blob/master/doc/usage_bson.md)
+  - [YAML](https://github.com/stargateaudio/pymarshal/blob/master/doc/usage_yaml.md)
+  - [CSV](https://github.com/stargateaudio/pymarshal/blob/master/doc/usage_csv.md)
 
 As YAML is compatible with JSON, use PyYAML to load or dump data
 with the `pymarshal.json` module, there is no explicit YAML module.
@@ -68,7 +68,7 @@ Your `__init__` methods should only use simple assignment through the
 `type_assert` functions.  If you have a use-case for a constructor that
 does more than simple assignment, use a separate
 ['factory' static method](
-  https://github.com/stargateaudio/pymarshal/blob/master/examples/factory.md
+  https://github.com/stargateaudio/pymarshal/blob/master/doc/factory.md
 ).
 
 There is also:
@@ -80,10 +80,10 @@ Rather than using the Golang "tag" syntax, simply create a
 and any re-named keys will be swapped before being passed to the
 class constructor or before being marshalled to JSON.  The full list
 of control variables are documented [HERE](
-  https://github.com/stargateaudio/pymarshal/blob/master/examples/control_variables.md
+  https://github.com/stargateaudio/pymarshal/blob/master/doc/control_variables.md
 ).
 
 ## Examples
 
-[Examples](https://github.com/stargateaudio/pymarshal/blob/master/examples/)
+[Examples](https://github.com/stargateaudio/pymarshal/blob/master/doc/)
 

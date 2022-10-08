@@ -1,0 +1,11 @@
+{
+    "_comment": [
+        "This file is used to store various data used by various tools.",
+        "You can add your own data to this file and consume it through",
+        "build tools or anything else.",
+        "org: The name of the Github organization or company",
+        "product: The name of the software, all lowercase, no spaces"
+    ],
+    "org": "d3v-t00Lz",
+    "product": "pymarshal"
+}
