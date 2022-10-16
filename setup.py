@@ -39,7 +39,7 @@ def load_requirements(*fnames):
     return result
 
 NAME = "pymarshal"
-URL = 'https://gitlab.com/d3v-t00Lz/pymarshal'
+URL = 'https://github.com/d3v-t00Lz/pymarshal'
 DESCRIPTION = (
     "Pythonic implementation of Golang struct (un)marshalling"
 )
